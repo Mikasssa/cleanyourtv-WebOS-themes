@@ -18,6 +18,7 @@
  },
  "bar": {
   "style": "pill",
+  "labels": "hide",
   "size": 62,
   "gap": 18
  },
@@ -31,8 +32,8 @@
   "radius": 44,
   "panel": 0.22,
   "panelPad": 28,
-  "tileAlpha": 0.55,
-  "tileFrost": 0.35,
+  "tileAlpha": 1,
+  "tileFrost": 0.4,
   "tileFrostColor": "#ffffff",
   "lift": 14,
   "focusScale": 1.08

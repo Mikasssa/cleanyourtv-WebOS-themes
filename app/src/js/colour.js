@@ -276,7 +276,7 @@ function fit(d, dock) {
     bh = bx[3] - bx[1],
     s = i.style;
   if (dock) {
-    s.height = 72 / bh + '%'; // matches #dock .tile img's height in home.css: how big the logo looks once its padding is cropped out
+    s.height = 94 / bh + '%'; // matches #dock .tile img's height in home.css: how big the logo looks once its padding is cropped out
     s.maxWidth = 'none';
     s.width = 'auto';
     // a gradient picture: the tile takes the same gradient between the picture's top and bottom edges, so no square shows
