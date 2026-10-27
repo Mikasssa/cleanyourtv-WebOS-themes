@@ -462,12 +462,12 @@ body {
   background: rgba(var(--dock-frost-rgb), var(--dock-tile-frost));
 }
 #dock .tile img {
-  height: 56%;
-  max-width: 46%;
+  height: 72%;
+  max-width: 62%;
 }
 #dock .tile svg {
-  width: 96px;
-  height: 96px;
+  width: 120px;
+  height: 120px;
 }
 #dock .tile.f {
   transform: translateY(var(--dock-lift)) scale(var(--dock-fs));
@@ -477,12 +477,12 @@ body {
   border-radius: var(--tile-r);
 }
 #grid .tile img {
-  width: 64%;
-  height: 64%;
+  width: 78%;
+  height: 78%;
 }
 #grid .tile svg {
-  width: 64px;
-  height: 64px;
+  width: 80px;
+  height: 80px;
 }
 #grid .tile.f {
   transform: scale(var(--grid-fs));
