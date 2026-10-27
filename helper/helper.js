@@ -55,6 +55,7 @@ const notify = load('notify', () => require('./notify').create(ctx));
 if (notify) load('voice', () => require('./voice').create(ctx));
 load('live', () => require('./live').create(ctx));
 load('theme', () => require('./theme').create(ctx));
+load('suntheme', () => require('./suntheme').create(ctx));
 load('wallpapers', () => require('./wallpapers').create(ctx));
 load('cards', () => require('./cards').create(ctx));
 const inputkey = load('inputkey', () => require('./inputkey').create(ctx));

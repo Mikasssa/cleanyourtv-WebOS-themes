@@ -1,0 +1,19 @@
+{
+ "name": "Glass (light)",
+ "author": "Mikasssa",
+ "description": "The light counterpart of Glass: bright frosted panels and glossy tiles over a soft pastel wallpaper, with a dark ink and a blue focus.",
+ "extends": "glass",
+ "colors": {
+  "night": "#eef1f7",
+  "panel": "#ffffff",
+  "ink": "#1b2330",
+  "accent": "#0a84ff",
+  "pill": "#1b2330"
+ },
+ "effects": {
+  "glow": 0.25,
+  "glowColor": "accent",
+  "wallpaper": "glass-light.jpg",
+  "wallpaperDim": 0.12
+ }
+}

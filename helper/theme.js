@@ -377,6 +377,26 @@ function create(ctx) {
     const t = setTimeout(startup, 8000);
     if (t.unref) t.unref();
   }
-  return { name: 'theme', prefix: '/api/theme/', handle, resolved, list, install, refreshCatalogue, preview };
+
+  // for other parts of the service (suntheme): switch the active theme without going through the HTTP API. Same rules as the
+  // "set" action: downloads the theme if it is not on the TV yet, keeps the current accent unless a new one is given, does nothing
+  // when the theme is already the one asked for.
+  async function setId(id, accent) {
+    if (!ID.test(id)) throw new Error('unknown theme');
+    const c = cur();
+    if (id !== DEFAULT_ID) {
+      try {
+        await install(id);
+      } catch (e) {
+        if (!load()[id]) throw e;
+      }
+    }
+    if (!load()[id]) throw new Error('unknown theme');
+    const acc = accent === undefined ? (id !== c.id ? '' : c.accent) : hex(accent) || '';
+    if (id !== c.id || acc !== c.accent) save({ id, accent: acc, prev: { id: c.id, accent: c.accent } });
+    return cur();
+  }
+
+  return { name: 'theme', prefix: '/api/theme/', handle, resolved, list, install, refreshCatalogue, preview, setId };
 }
 module.exports = { create, normalize, SCHEMA, DEFAULTS, imageOk, fontOk, ID, resolve };

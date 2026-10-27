@@ -23,6 +23,20 @@
    "preview": "compact/preview.jpg"
   },
   {
+   "id": "glass",
+   "name": "Glass",
+   "author": "Mikasssa",
+   "description": "Frosted, translucent panels and glossy rounded tiles over a soft colour-wash wallpaper, with a cool blue focus.",
+   "preview": "glass/preview.jpg"
+  },
+  {
+   "id": "glass-light",
+   "name": "Glass (light)",
+   "author": "Mikasssa",
+   "description": "The light counterpart of Glass: bright frosted panels and glossy tiles over a soft pastel wallpaper, with a dark ink and a blue focus.",
+   "preview": "glass-light/preview.jpg"
+  },
+  {
    "id": "horizon",
    "name": "Horizon",
    "author": "CleanYourTV",

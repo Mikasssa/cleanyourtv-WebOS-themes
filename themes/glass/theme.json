@@ -1,0 +1,71 @@
+{
+ "name": "Glass",
+ "author": "Mikasssa",
+ "description": "Frosted, translucent panels and glossy rounded tiles over a soft colour-wash wallpaper, with a cool blue focus.",
+ "colors": {
+  "night": "#05060c",
+  "panel": "#1c2230",
+  "ink": "#f2f5fa",
+  "accent": "#5ac8fa",
+  "pill": "#ffffff"
+ },
+ "surface": {
+  "pillAlpha": 0.16,
+  "pillRing": 0.28,
+  "pillRadius": 40,
+  "menuAlpha": 0.55,
+  "rowRadius": 40
+ },
+ "bar": {
+  "style": "pill",
+  "size": 62,
+  "gap": 18
+ },
+ "dock": {
+  "anchor": "bottom",
+  "align": "center",
+  "count": 6,
+  "w": 236,
+  "h": 142,
+  "gap": 26,
+  "radius": 44,
+  "panel": 0.22,
+  "panelPad": 28,
+  "tileAlpha": 0.55,
+  "tileFrost": 0.35,
+  "tileFrostColor": "#ffffff",
+  "lift": 14,
+  "focusScale": 1.08
+ },
+ "grid": {
+  "mode": "push",
+  "dockUp": 230,
+  "clipTop": 210,
+  "cols": 8,
+  "tileH": 150,
+  "gapX": 26,
+  "align": "center",
+  "radius": 40,
+  "overlayDim": 0.55
+ },
+ "tile": {
+  "gloss": 0.65,
+  "border": 0.25,
+  "ringWidth": 4,
+  "ringOffset": 6
+ },
+ "effects": {
+  "glow": 0.5,
+  "glowColor": "accent",
+  "wallpaper": "glass.jpg",
+  "wallpaperDim": 0.35
+ },
+ "clock": {
+  "layout": "stack",
+  "scale": 1.3,
+  "dateScale": 1
+ },
+ "shelf": {
+  "show": false
+ }
+}
