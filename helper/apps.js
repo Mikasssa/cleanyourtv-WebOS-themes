@@ -166,6 +166,7 @@ function create(ctx) {
     if (b.sort === 'usage' || b.sort === 'alpha') out.sort = b.sort;
     if (['auto', '24', '12'].includes(b.clock)) out.clock = b.clock;
     if (b.runDots === true) out.runDots = true; // the green dot on open apps (off unless switched on)
+    if (b.iconStyle === 'dark' || b.iconStyle === 'mono') out.iconStyle = b.iconStyle; // Customise > App icons
     if (b.noDrift === true) out.noDrift = true; // a theme's moving wallpaper held still (on unless switched off)
     // Wallpapers in the launcher: on or off, and how often the photo changes
     if (b.wall && typeof b.wall === 'object') {

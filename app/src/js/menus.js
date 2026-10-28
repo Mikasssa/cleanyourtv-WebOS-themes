@@ -509,6 +509,17 @@ function customizeMenu() {
         },
       },
       {
+        label: t('App icons'),
+        sub: iconStyle() === 'dark' ? t('Dark') : iconStyle() === 'mono' ? t('Dark, one colour') : t('Original'),
+        stay: true,
+        fn: function () {
+          var s = iconStyle();
+          if (s === 'mono') delete cfg.iconStyle;
+          else cfg.iconStyle = s === 'dark' ? 'mono' : 'dark';
+          saveCfg();
+        },
+      },
+      {
         label: t('Clock'),
         sub: cfg.clock === '24' ? t('24-hour') : cfg.clock === '12' ? t('12-hour') : t('Automatic'),
         stay: true,

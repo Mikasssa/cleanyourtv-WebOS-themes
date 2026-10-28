@@ -64,6 +64,7 @@ function rebuild() {
   }
   setFocus(nr, nc, true);
   markRunning();
+  darkSync(); /* Customise > App icons */
 }
 
 /* the apps that are open get a green dot; read each time Home is shown, kept only in memory */

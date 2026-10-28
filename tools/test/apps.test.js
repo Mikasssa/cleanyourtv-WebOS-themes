@@ -77,6 +77,10 @@ run(async () => {
   const still = config.get().noDrift === true;
   await call(apps, '/api/config', 'POST', { dock: ['a.one'], noDrift: 'yes' });
   ok(still && config.get().noDrift === undefined, 'a still wallpaper is saved only when switched on');
+  await call(apps, '/api/config', 'POST', { dock: ['a.one'], iconStyle: 'mono' });
+  const mono = config.get().iconStyle === 'mono';
+  await call(apps, '/api/config', 'POST', { dock: ['a.one'], iconStyle: 'neon' });
+  ok(mono && config.get().iconStyle === undefined, 'the icon style is saved when it is dark or mono, else left out');
   await call(apps, '/api/config', 'POST', {
     dock: ['a.one'],
     cards: { greeting: { type: 'greeting', name: 'Sam' }, 'x y': { type: 'a' } },

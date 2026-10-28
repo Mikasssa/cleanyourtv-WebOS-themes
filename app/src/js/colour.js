@@ -266,7 +266,7 @@ function iconColor(img, id) {
 function fit(d, dock) {
   var i = d._i,
     c = d._col;
-  if (!i) return;
+  if (!i || d._dk) return; // a dark icon is sized by darkicons.js
   i.removeAttribute('style');
   d.classList.remove('fill');
   d.style.background = '';

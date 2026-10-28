@@ -27,6 +27,7 @@ function tile(a) {
   d._i = i;
   if (!known) i.crossOrigin = 'anonymous';
   i.onload = function () {
+    if (d._dk) return; // a dark icon (darkicons.js) was put in its place
     if (!colors[a.id]) {
       var col = iconColor(i, a.id);
       d._col = col;
@@ -50,7 +51,8 @@ function tile(a) {
       paint(d, { c: f, b: hsl2rgb(hashHue(a.id), 0.4, 0.2) });
     }
   }; /* not remembered: a failed load must not pin a made-up colour */
-  i.src = a.id === '__live' ? LIVE_ICON : API + '/icon/' + encodeURIComponent(a.id);
+  d._url = a.id === '__live' ? LIVE_ICON : API + '/icon/' + encodeURIComponent(a.id);
+  i.src = d._url;
   d.appendChild(i);
   if (i.decode) i.decode().catch(function () {});
   return d;

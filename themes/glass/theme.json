@@ -35,7 +35,7 @@
   "tileAlpha": 1,
   "tileFrost": 0.2,
   "tileFrostColor": "#ffffff",
-  "iconScale": 2,
+  "iconScale": 1.6,
   "lift": 14,
   "focusScale": 1.08
  },
@@ -48,7 +48,7 @@
   "gapX": 26,
   "align": "center",
   "radius": 40,
-  "iconScale": 2,
+  "iconScale": 1.6,
   "overlayDim": 0.55
  },
  "tile": {

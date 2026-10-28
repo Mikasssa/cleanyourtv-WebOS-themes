@@ -55,9 +55,13 @@ system apps are never in it. The list is read when it opens and closes when you 
 - **hidden apps** (show them again);
 - the **app order** (most used first, or A to Z);
 - **mark running apps** (a green dot on their tiles, or none);
+- **app icons**: *Original*; *Dark*, every icon without its own background on one dark tile colour, so the icons look like one set
+  (made on the TV from each app's own icon; an icon that is a picture without a plain background stays as it is); or *Dark, one
+  colour*, the same with every logo in one light colour;
 - the **clock** format (automatic, 12 or 24 hour);
 - the **theme** (see [Themes](themes.md)) and the **accent colour**; the theme list shows each theme's screenshot;
 - **Wallpapers**: your own photos behind Home, and how often they change (see [Wallpapers](wallpapers.md));
+- **wallpaper motion**, where the theme's wallpaper drifts slowly: *Slow drift* or *Still*;
 - **More settings...**, which opens the [manager app](manager.md) for everything the TV and the service do.
 
 Putting the dock, buttons, hidden apps, order and clock back to the defaults is in the manager app: **Reset Home customisation**.
@@ -141,6 +145,7 @@ Settings are stored on the TV in `/media/developer/cleanyourtv/config.json`:
 | `sort` | `usage` or `alpha`. |
 | `clock` | `auto`, `12` or `24`. |
 | `runDots` | `true` shows a green dot on open apps (off by default). |
+| `iconStyle` | `dark`: every app icon without its own background, on one dark tile colour; `mono`: the same with every logo in one light colour (Customise > App icons). Absent: the icons as they are. |
 | `noDrift` | `true` holds a theme's moving wallpaper still (Customise > Wallpaper motion). |
 
 See [`config.example.json`](https://github.com/lasharor/cleanyourtv-WebOS/blob/main/config.example.json). Change settings in

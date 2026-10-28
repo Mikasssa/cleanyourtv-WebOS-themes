@@ -478,6 +478,15 @@ body {
 #grid .tile svg {
   transform: scale(var(--grid-ic, 1));
 }
+/* Customise > App icons, dark (darkicons.js): the logo alone, sized by darkSize() to the same area in every tile, on the dark tile colour; not scaled by
+   the theme's iconScale, which is meant for icons with their own background */
+#dock .tile.dk img,
+#grid .tile.dk img {
+  width: auto;
+  max-width: 70%;
+  max-height: 56%;
+  transform: none;
+}
 /* an icon larger than its tile is cut off at the tile's rounded edges; the focus ring, which sits outside the tile, is then drawn
    as a shadow against it (as for a tile that crops its picture) */
 body[data-icclip*="dock"] #dock .tile,
