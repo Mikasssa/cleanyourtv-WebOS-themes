@@ -17,27 +17,33 @@ mounted() { grep -q " $I " /proc/mounts; }
 apply() {
   [ -d "$I" ] || { echo "the screen saver's texts are not where they were expected ($I): nothing done"; return 1; }
   mounted && { echo "already on"; return 0; }
-  rm -rf "$T" && mkdir -p "$T" && cp "$I"/*.json "$T"/ || { echo "could not copy the texts: nothing done"; return 1; }
-  # the line is found by its English text, which is the key in every language's file; its translation becomes one space
-  node -e '
-var fs = require("fs"), d = process.argv[1], n = 0;
-fs.readdirSync(d).forEach(function (f) {
-  if (!/\.json$/.test(f)) return;
-  var p = d + "/" + f, j;
-  try { j = JSON.parse(fs.readFileSync(p, "utf8")); } catch (e) { return; }
-  var hit = false;
-  Object.keys(j).forEach(function (k) {
-    if (/press any button except for the power button/i.test(k)) { j[k] = " "; hit = true; }
-  });
-  if (hit) { fs.writeFileSync(p, JSON.stringify(j)); n++; }
+  rm -rf "$T" && mkdir -p "$T" || { echo "could not make $T: nothing done"; return 1; }
+  # node copies every file (no shell wildcard) and blanks the line, found by its English text, the key in every language's file
+  c=$(node -e '
+var fs = require("fs"), src = process.argv[1], dst = process.argv[2], n = 0, files = 0;
+fs.readdirSync(src).forEach(function (f) {
+  var b;
+  try { b = fs.readFileSync(src + "/" + f); } catch (e) { return; }
+  files++;
+  if (/\.json$/i.test(f)) {
+    try {
+      var j = JSON.parse(b.toString("utf8")), hit = false;
+      Object.keys(j).forEach(function (k) {
+        if (/press any button except for the power button/i.test(k)) { j[k] = " "; hit = true; }
+      });
+      if (hit) { b = Buffer.from(JSON.stringify(j)); n++; }
+    } catch (e) {}
+  }
+  fs.writeFileSync(dst + "/" + f, b);
 });
-console.log(n);
-' "$T" > "$T/.count" 2>/dev/null
-  c=$(cat "$T/.count" 2>/dev/null)
-  rm -f "$T/.count"
-  [ "${c:-0}" -gt 0 ] || { rm -rf "$T"; echo "the line was not found in the texts (a new firmware?): nothing done"; return 1; }
+console.log(n + " " + files);
+' "$I" "$T" 2>&1)
+  set -- $c
+  if [ "${1:-0}" -gt 0 ] 2>/dev/null; then :; else
+    rm -rf "$T"; echo "the line was not found (node said: $c; files there:)"; ls -la "$I" | head -8; return 1
+  fi
   mount --bind "$T" "$I" || { rm -rf "$T"; echo "the mount failed: nothing done"; return 1; }
-  echo "on: the line is blank in $c language files"
+  echo "on: the line is blank in $1 of $2 files"
 }
 
 case "$1" in
