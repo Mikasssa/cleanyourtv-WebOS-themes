@@ -60,9 +60,9 @@ var WALL = (function () {
   function next() {
     if (!list.length) return;
     if (pick()) return pick() === cur ? undefined : show(pick());
-    var pick = list[Math.floor(Math.random() * list.length)];
-    for (var n = 0; pick === cur && list.length > 1 && n < 8; n++) pick = list[Math.floor(Math.random() * list.length)];
-    show(pick);
+    var any = list[Math.floor(Math.random() * list.length)];
+    for (var n = 0; any === cur && list.length > 1 && n < 8; n++) any = list[Math.floor(Math.random() * list.length)];
+    show(any);
   }
   function arm() {
     clearInterval(timer);
