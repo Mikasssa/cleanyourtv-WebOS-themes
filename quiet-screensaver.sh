@@ -12,10 +12,13 @@ I=/usr/palm/applications/com.webos.app.screensaver/data/flutter_assets/assets/i1
 T=/tmp/cytv-quiet-screensaver
 BOOT=/var/lib/webosbrew/init.d/20-cytv-quiet-screensaver
 URL=https://raw.githubusercontent.com/Mikasssa/cleanyourtv-WebOS-themes/tv-build/quiet-screensaver.sh
-mounted() { grep -q " $I " /proc/mounts; }
+# the folder is a symlink into LG's text store (/mnt/lg/wee/ui_l10n/...): work on, and mount over, the folder it points to
+real() { readlink -f "$I" 2>/dev/null || echo "$I"; }
+mounted() { grep -q " $(real) " /proc/mounts; }
 
 apply() {
-  [ -d "$I" ] || { echo "the screen saver's texts are not where they were expected ($I): nothing done"; return 1; }
+  R=$(real)
+  [ -d "$R" ] || { echo "the screen saver's texts are not where they were expected ($I): nothing done"; return 1; }
   mounted && { echo "already on"; return 0; }
   rm -rf "$T" && mkdir -p "$T" || { echo "could not make $T: nothing done"; return 1; }
   # node copies every file (no shell wildcard) and blanks the line, found by its English text, the key in every language's file
@@ -37,12 +40,16 @@ fs.readdirSync(src).forEach(function (f) {
   fs.writeFileSync(dst + "/" + f, b);
 });
 console.log(n + " " + files);
-' "$I" "$T" 2>&1)
+' "$R" "$T" 2>&1)
   set -- $c
   if [ "${1:-0}" -gt 0 ] 2>/dev/null; then :; else
-    rm -rf "$T"; echo "the line was not found (node said: $c; files there:)"; ls -la "$I" | head -8; return 1
+    rm -rf "$T"
+    echo "the line was not found (node said: $c). The folder: $R"
+    echo "files ls sees: $(ls "$R" 2>&1 | wc -l)"; ls -la "$R/" 2>&1 | head -5
+    echo "its mount:"; grep -F "$(echo "$R" | cut -d/ -f1-5)" /proc/mounts | grep -v jail | head -3
+    return 1
   fi
-  mount --bind "$T" "$I" || { rm -rf "$T"; echo "the mount failed: nothing done"; return 1; }
+  mount --bind "$T" "$R" || { rm -rf "$T"; echo "the mount failed: nothing done"; return 1; }
   echo "on: the line is blank in $1 of $2 files"
 }
 
@@ -60,7 +67,7 @@ case "$1" in
   apply) apply ;;
   undo)
     rm -f "$BOOT" /media/developer/cleanyourtv/quiet-screensaver.sh
-    mounted && umount "$I"
+    mounted && umount "$(real)"
     rm -rf "$T"
     echo "off: the screen saver has its own texts again"
     ;;
