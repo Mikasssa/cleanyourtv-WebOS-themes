@@ -112,6 +112,11 @@ body {
 .glow.on {
   opacity: var(--glow-op);
 }
+/* effects.glowPos "center": a large soft light behind the middle of the screen, in the focused app's colour */
+[data-glow="center"] .glow {
+  height: 1080px;
+  background: radial-gradient(circle 1190px at 32% 42%, rgba(var(--c), 0.36) 0%, rgba(var(--c), 0.15) 50%, rgba(var(--c), 0) 100%);
+}
 
 #top {
   position: absolute;
@@ -168,6 +173,30 @@ body {
 [data-clock="stack"] #date {
   margin: 8px 0 0 6px;
   padding: 0;
+}
+/* clock.layout "split": the greeting above; the time, a thin line and the date in spaced capitals on one line */
+[data-clock="split"] #clock {
+  flex-wrap: wrap;
+  align-items: flex-end;
+  width: max-content;
+  height: auto;
+}
+[data-clock="split"] #greet {
+  display: var(--greet-d);
+  flex-basis: 100%;
+  margin: 0 0 14px 8px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: rgba(245, 246, 248, 0.55);
+}
+[data-clock="split"] #date {
+  margin: 0 0 14px 32px;
+  padding: 12px 0 4px 32px;
+  border-left: 2px solid rgba(245, 246, 248, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(245, 246, 248, 0.65);
+  white-space: nowrap;
 }
 #bar {
   pointer-events: auto;
@@ -248,6 +277,15 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+/* type.weight "light": the large time and app name drawn thin */
+[data-weight="light"] #time {
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+[data-weight="light"] #name {
+  font-weight: 300;
+  letter-spacing: -0.02em;
 }
 
 /* the view clips rows as they scroll up under the shelf */

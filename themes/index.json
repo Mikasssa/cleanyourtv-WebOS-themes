@@ -79,6 +79,13 @@
    "preview": "pixel/preview.jpg"
   },
   {
+   "id": "spotlight",
+   "name": "Spotlight",
+   "author": "Mikasssa",
+   "description": "Black, with a soft light in the colour of the focused app behind the middle of the screen. A thin clock with a greeting, its large name above a dark dock of full-colour tiles. Typeface: Outfit (OFL).",
+   "preview": "spotlight/preview.jpg"
+  },
+  {
    "id": "still",
    "name": "Still",
    "author": "CleanYourTV",

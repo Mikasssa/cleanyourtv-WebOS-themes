@@ -116,6 +116,19 @@ run(async () => {
     small.vars['--dock-ic'] === '0.8' && !('--grid-ic' in small.vars) && !('icclip' in small.attrs) && !('--dock-ic' in plain.vars),
     'a smaller icon is not cropped, and a theme that keeps the default size gets no icon keys'
   );
+  // Spotlight's settings: a centred glow, thin large text, a variable font, the split clock and overlapping dock tiles
+  const spot = themeMod.resolve(
+    themeMod.normalize(
+      { effects: { glowPos: 'center' }, type: { weight: 'light' }, clock: { layout: 'split' }, dock: { gap: -14 } },
+      'spot'
+    )
+  );
+  ok(
+    spot.attrs.glow === 'center' && spot.attrs.weight === 'light' && spot.attrs.clock === 'split' && spot.vars['--dock-gap'] === '-14px',
+    'a centred glow, light text, the split clock and a negative dock gap are passed to the page'
+  );
+  ok(!('glow' in plain.attrs) && !('weight' in plain.attrs), 'a theme that keeps the defaults gets no glow or weight keys');
+  ok(themeMod.normalize({ dock: { gap: -99 } }, 'g').v['dock.gap'] === -40, 'the dock gap is clamped at -40');
   // effects.wallpaperMotion: the drift is an attribute for the page, off when the animations are
   const drift = themeMod.resolve(themeMod.normalize({ effects: { wallpaperMotion: 'drift' } }, 'drift'));
   const driftOff = themeMod.resolve(themeMod.normalize({ effects: { wallpaperMotion: 'drift', speed: 0 } }, 'driftoff'));

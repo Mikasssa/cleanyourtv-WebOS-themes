@@ -1,0 +1,85 @@
+{
+ "name": "Spotlight",
+ "author": "Mikasssa",
+ "description": "Black, with a soft light in the colour of the focused app behind the middle of the screen. A thin clock with a greeting, its large name above a dark dock of full-colour tiles. Typeface: Outfit (OFL).",
+ "colors": {
+  "night": "#000000",
+  "panel": "#1c1c1e",
+  "ink": "#ffffff",
+  "accent": "#ffffff",
+  "focus": "#e8e8ea",
+  "pill": "#ffffff"
+ },
+ "surface": {
+  "pillAlpha": 0.12,
+  "pillRing": 0.22,
+  "pillRadius": 42,
+  "menuAlpha": 0.94,
+  "rowRadius": 32
+ },
+ "type": {
+  "fontFile": "outfit.ttf",
+  "fontVariable": true,
+  "weight": "light",
+  "scale": 1.05
+ },
+ "clock": {
+  "layout": "split",
+  "greeting": true,
+  "x": 112,
+  "y": 52,
+  "scale": 1.7,
+  "dateScale": 0.85
+ },
+ "bar": {
+  "style": "pill",
+  "labels": "show",
+  "x": 112,
+  "y": 84,
+  "size": 76,
+  "gap": 16
+ },
+ "shelf": {
+  "show": true,
+  "x": 136,
+  "y": 530,
+  "scale": 1.05
+ },
+ "dock": {
+  "anchor": "bottom",
+  "align": "center",
+  "count": 7,
+  "w": 262,
+  "h": 200,
+  "gap": -14,
+  "radius": 32,
+  "panel": 0.08,
+  "panelPad": 26,
+  "tileAlpha": 1,
+  "lift": 0,
+  "focusScale": 1.1
+ },
+ "grid": {
+  "mode": "push",
+  "dockUp": 120,
+  "clipTop": 100,
+  "cols": 7,
+  "tileH": 180,
+  "gapX": 28,
+  "gapY": 32,
+  "align": "center",
+  "radius": 30,
+  "overlayDim": 0.6
+ },
+ "tile": {
+  "gloss": 0.25,
+  "border": 0.1,
+  "ringWidth": 3,
+  "ringOffset": 6
+ },
+ "effects": {
+  "glow": 1,
+  "glowColor": "app",
+  "glowPos": "center"
+ }
+}

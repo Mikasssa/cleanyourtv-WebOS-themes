@@ -2,7 +2,17 @@
 var TH0 = { cols: 10, tileH: 151, gapY: 26, gt: 350, viewH: 780, dockN: 4, overlay: false, push: null, overlayH: 510, glow: '', slots: [] },
   TH = TH0,
   themeKeys = [],
-  themeAttrs = ['data-bar', 'data-labels', 'data-clock', 'data-grid', 'data-galign', 'data-icclip', 'data-motion'];
+  themeAttrs = [
+    'data-bar',
+    'data-labels',
+    'data-clock',
+    'data-grid',
+    'data-galign',
+    'data-icclip',
+    'data-motion',
+    'data-glow',
+    'data-weight',
+  ];
 function applyTheme(t) {
   var st = document.documentElement.style,
     b = document.body,
@@ -29,7 +39,17 @@ function applyTheme(t) {
   /* a theme's own typeface, served from its folder; the family name is in --font */
   var fs = $('tfont'),
     f = t.font,
-    css = f ? '@font-face{font-family:"CYTV Theme Font";src:url("' + API + '/api/theme/font/' + f.id + '/' + f.file + '")}' : '';
+    css = f
+      ? '@font-face{font-family:"CYTV Theme Font";src:url("' +
+        API +
+        '/api/theme/font/' +
+        f.id +
+        '/' +
+        f.file +
+        '")' +
+        (f.variable ? ';font-weight:100 900' : '') + // a variable font: its own weights, not drawn thicker by the browser
+        '}'
+      : '';
   if (!fs) {
     fs = document.createElement('style');
     fs.id = 'tfont';

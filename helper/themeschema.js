@@ -62,6 +62,14 @@ const SCHEMA = [
     "A typeface of the theme: a file in the theme's folder, `.woff2`, `.woff`, `.ttf` or `.otf`, at most 400 KB, used for all text. Characters it lacks come from `type.font`. Its licence must allow redistribution; put the licence file in the folder too.",
   ],
   ['type.scale', 'num', [0.8, 1.3], 1, 'Scale of the text of buttons, menus and tiles.'],
+  ['type.weight', 'enum', ['bold', 'light'], 'bold', 'Weight of the large time and the large app name: `light` draws them thin.'],
+  [
+    'type.fontVariable',
+    'bool',
+    null,
+    false,
+    '`type.fontFile` is a variable font (one file with every weight): the light and bold text then use its own weights.',
+  ],
   ['clock.show', 'bool', null, true, 'Show the clock.'],
   ['clock.date', 'bool', null, true, 'Show the date beside or under the time.'],
   [
@@ -69,9 +77,15 @@ const SCHEMA = [
     'bool',
     null,
     false,
-    'Show a greeting (Good morning / afternoon / evening, in the language) in capitals above the time. Needs the stacked layout.',
+    'Show a greeting (Good morning / afternoon / evening, in the language) in capitals above the time. Needs the stacked or split layout.',
   ],
-  ['clock.layout', 'enum', ['inline', 'stack'], 'inline', '`inline`: the date beside the time; `stack`: under it.'],
+  [
+    'clock.layout',
+    'enum',
+    ['inline', 'stack', 'split'],
+    'inline',
+    '`inline`: the date beside the time; `stack`: under it; `split`: the greeting above, the date beside the time after a thin line, in spaced capitals.',
+  ],
   ['clock.anchor', 'enum', TOPBOT, 'top', 'Which screen edge `clock.y` counts from.'],
   ['clock.align', 'enum', POS, 'left', 'Which side `clock.x` counts from; `center` centres it.'],
   ['clock.x', 'int', [0, 900], 96, 'Distance from that side, in px (on a 1920 x 1080 canvas). Not used when centred.'],
@@ -105,7 +119,7 @@ const SCHEMA = [
   ['dock.count', 'int', [3, 8], 4, 'Apps in the dock.'],
   ['dock.w', 'int', [120, 500], 408, 'Width of a dock tile, in px.'],
   ['dock.h', 'int', [100, 300], 230, 'Height of a dock tile, in px.'],
-  ['dock.gap', 'int', [8, 60], 32, 'Space between dock tiles, in px.'],
+  ['dock.gap', 'int', [-40, 60], 32, 'Space between dock tiles, in px; below 0 the tiles overlap a little.'],
   ['dock.radius', 'int', [0, 80], 36, 'Corner radius of dock tiles.'],
   ['dock.panel', 'num', [0, 0.6], 0, 'Opacity of a translucent panel behind the dock tiles; 0 for none.'],
   ['dock.panelPad', 'int', [0, 60], 24, 'Space between the panel and the tiles, in px.'],
@@ -173,6 +187,13 @@ const SCHEMA = [
   ['tile.ringOffset', 'int', [0, 14], 4, 'Space between a tile and its focus ring, in px.'],
   ['effects.glow', 'num', [0, 1], 1, 'Strength of the ambient glow at the top.'],
   ['effects.glowColor', 'enum', ['app', 'accent'], 'app', '`app`: taken from the focused icon; `accent`: the accent colour.'],
+  [
+    'effects.glowPos',
+    'enum',
+    ['top', 'center'],
+    'top',
+    '`top`: the glow comes from the top left; `center`: a large soft light behind the middle of the screen.',
+  ],
   ['effects.speed', 'num', [0, 2], 1, 'Animation speed multiplier; 0 switches the animations off.'],
   [
     'effects.wallpaper',
@@ -490,6 +511,10 @@ function resolve(t, accent) {
     out.attrs.icclip = (v['dock.iconScale'] > 1 ? 'dock' : '') + (v['grid.iconScale'] > 1 ? 'grid' : '');
   // only a theme with a typeface has this key, so the replies for the other themes stay as they were
   if (v['type.fontFile']) out.font = { id: v.fontTheme || t.id, file: v['type.fontFile'] };
+  if (out.font && v['type.fontVariable']) out.font.variable = true;
+  // only a theme that sets these has the keys (the same reason as above)
+  if (v['effects.glowPos'] !== 'top') out.attrs.glow = v['effects.glowPos'];
+  if (v['type.weight'] !== 'bold') out.attrs.weight = v['type.weight'];
   return out;
 }
 
