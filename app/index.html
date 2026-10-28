@@ -2714,7 +2714,54 @@ function inputTile(d, a) {
 var DARK_BG = [24, 26, 32],
   iconInfo = {}, // app id: {box, asp, top, bot, dark, mono} (see cutout), or '' when the icon is left as it is
   darkQ = [],
-  darkBusy = false;
+  darkBusy = false,
+  ICON_KEY = 'cytv.icons.v1',
+  iconStore = null, // what was measured before, kept in the browser: app id: {s: iconStamp, i: info without the pictures it does not use}
+  iconSaveT = 0;
+/* which icon a measurement belongs to: your own file (its time and size) or the app's own icon (its folder and file) */
+function iconStamp(a) {
+  return (a.own ? 'o' + (a.iv || '') : 'a') + '|' + (a.folder || '') + '/' + (a.icon || '');
+}
+/* the measurement kept from an earlier start, when its icon has not changed since; undefined when there is none */
+function iconCached(a) {
+  if (iconStore === null) {
+    try {
+      iconStore = JSON.parse(localStorage.getItem(ICON_KEY) || '{}') || {};
+    } catch (e) {
+      iconStore = {};
+    }
+  }
+  var e = iconStore[a.id];
+  return e && e.s === iconStamp(a) ? e.i : undefined;
+}
+/* keeps a measurement for the next start, with only the logo picture the tile shows now (the pictures are the large part) */
+function iconKeep(a, info, need) {
+  if (iconStore === null) iconCached(a);
+  var k,
+    slim = '';
+  if (info) {
+    slim = {};
+    for (k in info) if (k !== 'dark' && k !== 'mono') slim[k] = info[k];
+    if (need) slim[need] = info[need];
+  }
+  iconStore[a.id] = { s: iconStamp(a), i: slim };
+  clearTimeout(iconSaveT);
+  iconSaveT = setTimeout(function () {
+    try {
+      localStorage.setItem(ICON_KEY, JSON.stringify(iconStore));
+    } catch (e) {
+      /* full: keep the measurements and drop the pictures; those are made again when a tile needs one */
+      try {
+        for (k in iconStore)
+          if (iconStore[k].i) {
+            delete iconStore[k].i.dark;
+            delete iconStore[k].i.mono;
+          }
+        localStorage.setItem(ICON_KEY, JSON.stringify(iconStore));
+      } catch (e2) {}
+    }
+  }, 1000);
+}
 /* hold OK on an app > Logo colours: its logo in one colour also in the Dark style */
 function monoIcon(id) {
   return (cfg.monoIcons || []).indexOf(id) >= 0;
@@ -3054,20 +3101,47 @@ function darkReset(d) {
   if (d._col) paint(d, d._col);
   fit(d, !!(d.parentNode && d.parentNode.id === 'dock'));
 }
+/* Original: the picture's own background; a logo of your own takes its app's colour (darkNext), else a light tile when it is dark
+   and the dark one when it is light */
+function origBg(info) {
+  var br = info.brand;
+  return info.top ? [info.top, info.bot] : br ? [br.top, br.bot] : info.lm < 110 ? [[240, 241, 244]] : [DARK_BG];
+}
+/* Original: a logo of your own that would barely show on its app's colour is drawn in the light ink */
+function origLift(info) {
+  return !!(info.brand && contrast(origBg(info)[0], info.lm) < 1.7);
+}
+/* the logo picture a tile in style st shows: 'dark', 'mono', or none (the icon itself) */
+function logoNeed(info, st) {
+  if (!info) return '';
+  return st || (origLift(info) ? 'mono' : '');
+}
 /* one tile in the style chosen now, once its icon has been read */
 function darkApply(d) {
   var a = d._a,
     i = d._i;
   if (!a || a.sys || a.input || !i || !d._url) return;
+  var st = iconStyle();
+  if (st === 'dark' && monoIcon(a.id)) st = 'mono';
   var info = iconInfo[a.id];
+  if (info === undefined) {
+    /* measured at an earlier start: used at once, unless the logo picture this style needs was not kept */
+    var kept = iconCached(a);
+    if (kept !== undefined && (!kept || !logoNeed(kept, st) || kept[logoNeed(kept, st)])) info = iconInfo[a.id] = kept;
+  }
   if (info === undefined) {
     if (darkQ.indexOf(d) < 0) darkQ.push(d);
     darkNext();
     return;
   }
   if (!info) return darkReset(d);
-  var st = iconStyle();
-  if (st === 'dark' && monoIcon(a.id)) st = 'mono';
+  var need = logoNeed(info, st);
+  if (need && !info[need]) {
+    /* kept without the picture this style needs: measured again */
+    delete iconInfo[a.id];
+    if (iconStore && iconStore[a.id]) delete iconStore[a.id];
+    return darkApply(d);
+  }
   var key = st || 'orig';
   if (d._dk !== key) {
     d._dk = key;
@@ -3080,10 +3154,8 @@ function darkApply(d) {
       paint(d, { c: (d._col && d._col.c) || [74, 84, 112], b: DARK_BG });
     } else {
       var br = info.brand,
-        tb = info.top ? [info.top, info.bot] : br ? [br.top, br.bot] : info.lm < 110 ? [[240, 241, 244]] : [DARK_BG];
-      /* the picture's own background; a logo of your own takes its app's colour (above), else a light tile when it is dark and the
-         dark one when it is light. A logo that would barely show on its app's colour is drawn in the light ink */
-      var lift = br && contrast(tb[0], info.lm) < 1.7;
+        tb = origBg(info),
+        lift = origLift(info);
       i.src = lift ? info.mono : d._url;
       d._lift = lift; // the light ink is the logo alone, already cropped
       if (br) paint(d, { c: br.c, b: tb[0] });
@@ -3127,6 +3199,9 @@ function darkNext() {
   var im = new Image(),
     done = function (info) {
       iconInfo[id] = info;
+      var st = iconStyle();
+      if (st === 'dark' && monoIcon(id)) st = 'mono';
+      iconKeep(d._a, info, logoNeed(info, st));
       darkBusy = false;
       darkApply(d);
       setTimeout(darkNext, 20);
@@ -3173,7 +3248,11 @@ function darkNext() {
 /* after a rebuild: every tile in the style chosen now (the size also follows a tile moved between the dock and the grid) */
 function darkSync() {
   document.body.classList.toggle('darkic', !!iconStyle());
-  for (var id in tiles) darkApply(tiles[id]);
+  /* the dock first: its icons are the ones seen at once, so they are read before the grid's */
+  var dk = $('dock'),
+    k;
+  for (k = 0; dk && k < dk.children.length; k++) if (dk.children[k]._a) darkApply(dk.children[k]);
+  for (k in tiles) darkApply(tiles[k]);
 }
 /* ---------- theme: the service resolves the chosen theme (manager > Theme) into CSS variables and a few numbers ---------- */
 var TH0 = {

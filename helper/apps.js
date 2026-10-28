@@ -216,11 +216,22 @@ function create(ctx) {
   async function handle(req, res, u, body) {
     if (u === '/api/apps') {
       // an app with an icon of your own is marked own: the launcher then takes it as a logo on transparency, with nothing to cut out
-      let own = [];
+      // iv: the file's time and size, so the launcher knows when an icon it has measured and kept was replaced
+      const own = {};
       try {
-        own = fs.readdirSync(P.ICONS).map(f => f.replace(/\.(png|webp|jpg|svg)$/, ''));
+        for (const f of fs.readdirSync(P.ICONS)) {
+          const id = f.replace(/\.(png|webp|jpg|svg)$/, '');
+          let iv = '';
+          try {
+            const st = fs.statSync(path.join(P.ICONS, f));
+            iv = Math.round(st.mtime.getTime() / 1000) + '-' + st.size;
+          } catch (_) {}
+          own[id] = iv;
+        }
       } catch (_) {}
-      const list = (await apps()).map(a => (own.indexOf(a.id) >= 0 ? Object.assign({}, a, { own: true }) : a));
+      const list = (await apps()).map(a =>
+        Object.prototype.hasOwnProperty.call(own, a.id) ? Object.assign({}, a, { own: true, iv: own[a.id] }) : a
+      );
       return web.json(res, { apps: list, config: launcherConfig(), usage: usageScores(), version: ctx.version });
     }
     if (u === '/api/inputs') return web.json(res, await askInputs());

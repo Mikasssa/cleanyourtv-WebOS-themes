@@ -107,6 +107,13 @@ run(async () => {
   fs.writeFileSync(path.join(dir, 'a.one.svg'), '<svg/>');
   r = await call(apps, '/api/apps');
   ok(r.j.apps[0].own === true, 'an app with an icon of its own is marked own');
+  const iv1 = r.j.apps[0].iv;
+  fs.writeFileSync(path.join(dir, 'a.one.svg'), '<svg width="2"/>');
+  r = await call(apps, '/api/apps');
+  ok(
+    /^\d+-\d+$/.test(iv1) && r.j.apps[0].iv !== iv1,
+    'an icon of its own carries its time and size (iv), which change when the file is replaced: ' + iv1 + ' then ' + r.j.apps[0].iv
+  );
   const sv = await serve((q, rs) => apps.handle(q, rs, q.url, async () => ({})));
   // http.get, not fetch: the tests run under Node 8 too
   const get = u =>

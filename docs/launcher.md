@@ -81,6 +81,9 @@ An app's icon can be replaced by a picture of your own: put it on the TV as `/me
 in every **App icons** style. The app ids are listed by `curl -s 127.0.0.1:8765/api/apps` on the TV. Open Home again to see a new icon;
 delete the file to get the app's own icon back. Use only pictures you may use.
 
+The launcher measures every icon once (where its logo is, the tile colour) and keeps the result in its browser storage, so the next time
+Home opens the icons show in their style at once, the dock's first. A replaced file of your own (another time or size) is measured again.
+
 ## Cards
 
 Themes with places for cards (**Lock Screen**, **Bloom** and **Horizon**) have a **Cards** row in **Customise**. It lists the places (above the clock,
