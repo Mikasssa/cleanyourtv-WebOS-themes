@@ -210,8 +210,15 @@ function create(ctx) {
   }
 
   async function handle(req, res, u, body) {
-    if (u === '/api/apps')
-      return web.json(res, { apps: await apps(), config: launcherConfig(), usage: usageScores(), version: ctx.version });
+    if (u === '/api/apps') {
+      // an app with an icon of your own is marked own: the launcher then takes it as a logo on transparency, with nothing to cut out
+      let own = [];
+      try {
+        own = fs.readdirSync(P.ICONS).map(f => f.replace(/\.(png|webp|jpg|svg)$/, ''));
+      } catch (_) {}
+      const list = (await apps()).map(a => (own.indexOf(a.id) >= 0 ? Object.assign({}, a, { own: true }) : a));
+      return web.json(res, { apps: list, config: launcherConfig(), usage: usageScores(), version: ctx.version });
+    }
     if (u === '/api/inputs') return web.json(res, await askInputs());
     if (u === '/api/inputs/pin' && req.method === 'POST') return web.json(res, await pin(await body(req)));
     if (u === '/api/foreground') return web.json(res, await luna('luna://com.webos.applicationManager/getForegroundAppInfo', {}));

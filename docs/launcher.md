@@ -17,16 +17,16 @@ same on every supported webOS version.
 
 ## Keys
 
-| Action | How |
-|---|---|
-| Open an app | OK |
-| App options (dock, hide) | Hold OK on an app |
-| Move or remove a top button | Hold OK on it |
-| Customise | The **Customise** button |
-| Live TV | The **Live TV** button or tile |
-| Switch input | The **Inputs** button |
-| Put an input on Home | Hold OK on it in the Inputs list |
-| Close running apps | Back on the home screen |
+| Action                      | How                              |
+| --------------------------- | -------------------------------- |
+| Open an app                 | OK                               |
+| App options (dock, hide)    | Hold OK on an app                |
+| Move or remove a top button | Hold OK on it                    |
+| Customise                   | The **Customise** button         |
+| Live TV                     | The **Live TV** button or tile   |
+| Switch input                | The **Inputs** button            |
+| Put an input on Home        | Hold OK on it in the Inputs list |
+| Close running apps          | Back on the home screen          |
 
 The Magic Remote pointer works too: pointing and clicking, and holding the button on an app for its options.
 
@@ -55,20 +55,19 @@ system apps are never in it. The list is read when it opens and closes when you 
 - **hidden apps** (show them again);
 - the **app order** (most used first, or A to Z);
 - **mark running apps** (a green dot on their tiles, or none);
-- **app icons**: every logo is shown at the same size in every tile, whatever the icon's own margins. *Original*: the icon with its
-  own background (the tile takes that background); *Dark*: the logo alone, in its colours, on one dark tile colour, so the icons look
-  like one set; *Dark, one colour*: the same with every logo in one light colour. The background is taken out on the TV from each
+- **app icons**: every logo is shown at the same width in every tile (its height follows its proportions), whatever the icon's own margins. _Original_: the icon with its
+  own background (the tile takes that background); _Dark_: the logo alone, in its colours, on one dark tile colour, so the icons look
+  like one set; _Dark, one colour_: the same with every logo in one light colour. The background is taken out on the TV from each
   app's own icon; an icon that is a picture without a plain background stays as it is. For the cleanest result, use
-  [your own icons](#your-own-icons). In *Dark*, holding OK on an app gives **Logo colours**: *Its own* or *One colour*, for a logo
+  [your own icons](#your-own-icons). In _Dark_, holding OK on an app gives **Logo colours**: _Its own_ or _One colour_, for a logo
   whose colours do not sit well on the dark tile;
 - the **clock** format (automatic, 12 or 24 hour);
 - the **theme** (see [Themes](themes.md)) and the **accent colour**; the theme list shows each theme's screenshot;
 - **Wallpapers**: your own photos behind Home, and how often they change (see [Wallpapers](wallpapers.md));
-- **wallpaper motion**, where the theme's wallpaper drifts slowly: *Slow drift* or *Still*;
+- **wallpaper motion**, where the theme's wallpaper drifts slowly: _Slow drift_ or _Still_;
 - **More settings...**, which opens the [manager app](manager.md) for everything the TV and the service do.
 
 Putting the dock, buttons, hidden apps, order and clock back to the defaults is in the manager app: **Reset Home customisation**.
-
 
 ## Your own icons
 
@@ -83,14 +82,14 @@ Themes with places for cards (**Lock Screen**, **Bloom** and **Horizon**) have a
 beside the clock, a column on the right, above the dock); choose one to put a card there or leave it empty. A card you chose stays
 when you switch to another theme with the same place.
 
-| Card | What it shows |
-|---|---|
-| Greeting | Good morning, afternoon or evening, with your name if you set one, and the date or the weather on a second line where there is room. |
-| Weather | The temperature and the sky now at a place you search for on the phone page, from Open-Meteo (free, no account), with the next three days if you like; °C or °F. The TV asks at most every 30 minutes and keeps the last answer for when the internet is away. |
-| Home Assistant entity | One entity with an icon, its state (On, Off, 8.4 °C) and its name. Select it with the remote (it joins the row of top buttons) and press OK to switch a light, switch, fan or automation, or to run a scene or script. Locks, alarms and covers are never switched from the TV. |
-| Home Assistant entities | A list of entities, one per line on the phone page, with an optional title. |
-| Home Assistant camera | A camera's picture, renewed every 10, 30 or 60 seconds while Home is shown. |
-| Text | Your own text. `{{greeting}}`, `{{time}}`, `{{date}}` and `{{weekday}}` are filled in and kept up to date, and `{{weather.temp}}` and `{{weather.text}}` with a weather card on Home; `**bold**`, `*italic*` and a line starting with `#` for a heading. In three sizes. |
+| Card                    | What it shows                                                                                                                                                                                                                                                                   |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Greeting                | Good morning, afternoon or evening, with your name if you set one, and the date or the weather on a second line where there is room.                                                                                                                                            |
+| Weather                 | The temperature and the sky now at a place you search for on the phone page, from Open-Meteo (free, no account), with the next three days if you like; °C or °F. The TV asks at most every 30 minutes and keeps the last answer for when the internet is away.                  |
+| Home Assistant entity   | One entity with an icon, its state (On, Off, 8.4 °C) and its name. Select it with the remote (it joins the row of top buttons) and press OK to switch a light, switch, fan or automation, or to run a scene or script. Locks, alarms and covers are never switched from the TV. |
+| Home Assistant entities | A list of entities, one per line on the phone page, with an optional title.                                                                                                                                                                                                     |
+| Home Assistant camera   | A camera's picture, renewed every 10, 30 or 60 seconds while Home is shown.                                                                                                                                                                                                     |
+| Text                    | Your own text. `{{greeting}}`, `{{time}}`, `{{date}}` and `{{weekday}}` are filled in and kept up to date, and `{{weather.temp}}` and `{{weather.text}}` with a weather card on Home; `**bold**`, `*italic*` and a line starting with `#` for a heading. In three sizes.        |
 
 Names, texts and the other options are typed on your phone: **Customise** > **Cards** > **Set up from your phone** opens the manager
 app with a QR code. The page shows a form for each place, and **Edit as JSON** shows all cards at once, for example
@@ -146,18 +145,18 @@ chosen in the manager app.
 
 Settings are stored on the TV in `/media/developer/cleanyourtv/config.json`:
 
-| Key | Meaning |
-|---|---|
-| `dock` | App ids in the dock (up to four). |
-| `topbar` | The buttons at the top. |
-| `hidden` | App ids you hid. |
-| `pinnedInputs` | The inputs on Home: `{id, label, port}`, `id` being the input's app (for example `com.webos.app.hdmi2`). |
-| `sort` | `usage` or `alpha`. |
-| `clock` | `auto`, `12` or `24`. |
-| `runDots` | `true` shows a green dot on open apps (off by default). |
-| `iconStyle` | `dark`: every app icon without its own background, on one dark tile colour; `mono`: the same with every logo in one light colour (Customise > App icons). Absent: the icons as they are. |
-| `monoIcons` | App ids whose logo is in one light colour also in the *Dark* icon style (hold OK on the app > **Logo colours**). |
-| `noDrift` | `true` holds a theme's moving wallpaper still (Customise > Wallpaper motion). |
+| Key            | Meaning                                                                                                                                                                                  |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dock`         | App ids in the dock (up to four).                                                                                                                                                        |
+| `topbar`       | The buttons at the top.                                                                                                                                                                  |
+| `hidden`       | App ids you hid.                                                                                                                                                                         |
+| `pinnedInputs` | The inputs on Home: `{id, label, port}`, `id` being the input's app (for example `com.webos.app.hdmi2`).                                                                                 |
+| `sort`         | `usage` or `alpha`.                                                                                                                                                                      |
+| `clock`        | `auto`, `12` or `24`.                                                                                                                                                                    |
+| `runDots`      | `true` shows a green dot on open apps (off by default).                                                                                                                                  |
+| `iconStyle`    | `dark`: every app icon without its own background, on one dark tile colour; `mono`: the same with every logo in one light colour (Customise > App icons). Absent: the icons as they are. |
+| `monoIcons`    | App ids whose logo is in one light colour also in the _Dark_ icon style (hold OK on the app > **Logo colours**).                                                                         |
+| `noDrift`      | `true` holds a theme's moving wallpaper still (Customise > Wallpaper motion).                                                                                                            |
 
 See [`config.example.json`](https://github.com/lasharor/cleanyourtv-WebOS/blob/main/config.example.json). Change settings in
 the launcher; the file is read and written by the service.

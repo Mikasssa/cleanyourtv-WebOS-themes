@@ -2431,8 +2431,7 @@ function inputTile(d, a) {
   return d;
 }
 /* ---------- app icons as one set (Customise > App icons). Each icon is read once in a canvas: its plain or graded background is found
-   and taken out, and the logo's box is measured. Every style then shows the logo at the same size in every tile (a square logo 50.6%
-   of the tile's height, a wide one lower): 'Original' keeps the icon with its own background (the tile takes that background, the
+   and taken out, and the logo's box is measured. Every style then shows the logo at the same width in every tile (its height follows its proportions): 'Original' keeps the icon with its own background (the tile takes that background, the
    picture is scaled and cropped around the logo), 'dark' puts the logo in its own colours on one dark tile colour, 'mono' draws it in
    one light colour. Kept in memory only. An icon that cannot be read, or a picture without a plain background, stays as it is. Your
    own icons (a transparent logo in the icons folder on the TV, docs/launcher.md) need no cutting and come out sharpest. ---------- */
@@ -2753,11 +2752,11 @@ function cutout(img, kind) {
   info.mono = shot();
   return info;
 }
-/* the logo's height in the tile, in % of the tile's height: about the same area whatever its shape, and never wider than 74.8% of
-   the tile (dock and grid tiles have their own proportions) */
+/* the logo's height in the tile, in % of the tile's height: every logo 64% of the tile's width, its height following its
+   proportions, but never over 66% of the tile's height (a tall or square logo is then narrower) */
 function logoH(d, asp) {
   var r = d.offsetWidth && d.offsetHeight ? d.offsetWidth / d.offsetHeight : 1.4;
-  return Math.min(61.6, 50.6 / Math.sqrt(asp), (74.8 * r) / asp);
+  return Math.min(66, (64 * r) / asp);
 }
 function darkReset(d) {
   if (!d._dk) return;
@@ -2845,7 +2844,7 @@ function darkNext() {
   im.onload = function () {
     var info = '';
     try {
-      var an = analyse(im);
+      var an = d._a.own ? { k: 'logo' } : analyse(im); // an icon of your own is a logo on transparency: nothing to cut out
       info = an ? cutout(im, an.k) : '';
     } catch (e) {
       info = '';
