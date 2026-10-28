@@ -56,6 +56,7 @@ function refreshMenu() {
   drawMenu();
 }
 function closeMenus() {
+  if (SET.on) return setClose(); // a row that finished a task (opened an app) also closes the Customise screen
   stack = [];
   if (ovEl) {
     ovEl.remove();
@@ -67,6 +68,7 @@ function closeMenus() {
    the menu that is redrawn on every key, so the picture is only loaded again when the focused row's picture changes. */
 var sideEl = null;
 function drawSide(it) {
+  if (SET.on) it = null; // the Customise screen shows the picture in its own window (settings.js)
   if (!it) {
     if (sideEl) sideEl.remove();
     sideEl = null;
@@ -95,9 +97,12 @@ function drawSide(it) {
 function backMenu() {
   stack.pop();
   if (stack.length) refreshMenu();
+  else if (SET.on)
+    setDraw(); // out of the last options menu: back to the settings list
   else closeMenus();
 }
 function drawMenu() {
+  if (SET.on) return setDraw(); // the Customise screen draws the menu in its options column
   var m = stack[stack.length - 1],
     N = 8,
     start = Math.max(0, Math.min(m.idx - 3, m.items.length - N));
@@ -495,93 +500,6 @@ function barMenu(o) {
       },
     });
     return items;
-  });
-}
-/* Customise: how Home looks. What the TV and the service do is in the manager app (More settings...) */
-function customizeMenu() {
-  openBuilt(t('Customise'), function () {
-    var nh = hiddenIds().length;
-    return [
-      { label: t('Dock'), stay: true, fn: dockMenu },
-      { label: t('Top buttons'), stay: true, fn: topButtonsMenu },
-      { label: t('Hidden apps'), sub: nh ? String(nh) : '', stay: true, fn: hiddenMenu },
-      {
-        label: t('App order'),
-        sub: cfg.sort === 'alpha' ? t('A to Z') : t('Most used first'),
-        stay: true,
-        fn: function () {
-          cfg.sort = cfg.sort === 'alpha' ? 'usage' : 'alpha';
-          saveCfg();
-        },
-      },
-      {
-        label: t('Mark running apps'),
-        sub: cfg.runDots === true ? t('Green dot') : t('No dot'),
-        stay: true,
-        fn: function () {
-          if (cfg.runDots === true) delete cfg.runDots;
-          else cfg.runDots = true;
-          saveCfg();
-        },
-      },
-      {
-        label: t('App icons'),
-        sub: iconStyle() === 'dark' ? t('Dark') : iconStyle() === 'mono' ? t('Dark, one colour') : t('Original'),
-        stay: true,
-        fn: function () {
-          var s = iconStyle();
-          if (s === 'mono') delete cfg.iconStyle;
-          else cfg.iconStyle = s === 'dark' ? 'mono' : 'dark';
-          saveCfg();
-        },
-      },
-      {
-        label: t('Clock'),
-        sub: cfg.clock === '24' ? t('24-hour') : cfg.clock === '12' ? t('12-hour') : t('Automatic'),
-        stay: true,
-        fn: function () {
-          cfg.clock = cfg.clock === '24' ? '12' : cfg.clock === '12' ? 'auto' : '24';
-          saveCfg();
-          tick();
-        },
-      },
-      { sep: true },
-      { label: t('Theme'), stay: true, fn: themeMenu },
-      /* only where the theme has slots for cards */
-      (TH.slots || []).length ? { label: t('Cards'), stay: true, fn: cardsMenu } : null,
-      {
-        label: t('Wallpapers'),
-        sub: cfg.wall && cfg.wall.on ? t('On') : t('Off'),
-        stay: true,
-        fn: wallMenu,
-      },
-      /* only where the theme's wallpaper moves */
-      document.body.getAttribute('data-motion')
-        ? {
-            label: t('Wallpaper motion'),
-            sub: cfg.noDrift === true ? t('Still') : t('Slow drift'),
-            stay: true,
-            fn: function () {
-              if (cfg.noDrift === true) delete cfg.noDrift;
-              else cfg.noDrift = true;
-              saveCfg();
-            },
-          }
-        : null,
-      { label: t('Accent colour'), stay: true, fn: accentMenu },
-      { sep: true },
-      {
-        label: t('More settings...'),
-        sub: t('Home, Live TV, Debloat, updates'),
-        fn: function () {
-          launch('com.cleanyourtv.manager');
-        },
-      },
-      /* the hidden gestures, said where people already look instead of over Home (issue: hold OK was undiscoverable) */
-      { note: t('Hold OK on an app for its options. Back on Home lists the open apps.') },
-    ].filter(function (it) {
-      return it;
-    });
   });
 }
 /* Wallpapers: switched on here and how often the photo changes; the photos are added in the manager (uploads from a phone, Immich) */

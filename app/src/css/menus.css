@@ -135,3 +135,209 @@
   color: var(--ink2);
   white-space: normal;
 }
+/* Customise as a full screen (settings.js): categories, the settings list, and Home itself scaled into a window with the options
+   below it. The window is a hole in the dark screen: its shadow covers everything around it. */
+#sets {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1920px;
+  height: 1080px;
+  z-index: 30;
+}
+#sets .swin {
+  position: absolute;
+  left: 1100px;
+  top: 150px;
+  width: 760px;
+  height: 428px;
+  border-radius: 26px;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.18),
+    0 0 0 3000px rgba(9, 11, 16, 0.985);
+  overflow: hidden;
+}
+#sets .swin img {
+  width: 760px;
+  height: 428px;
+  object-fit: cover;
+  display: block;
+}
+#sets h1 {
+  position: absolute;
+  left: 82px;
+  top: 62px;
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+#sets .scats {
+  position: absolute;
+  left: 60px;
+  top: 150px;
+  width: 330px;
+}
+#sets .scat,
+#sets .srow,
+#sets .sopt {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+#sets .scat {
+  height: 66px;
+  padding: 0 22px;
+  margin-bottom: 8px;
+  font-size: calc(26px * var(--fs));
+  color: var(--ink2);
+}
+#sets .scat svg,
+#sets .sopt svg {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  margin-right: 16px;
+}
+#sets .scat.on {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ink);
+}
+#sets .scat.on svg {
+  color: var(--acc);
+}
+#sets .scat.f,
+#sets .srow.f,
+#sets .sopt.f {
+  background: var(--acc);
+  color: var(--acc-ink);
+}
+#sets .scat.f svg {
+  color: var(--acc-ink);
+}
+#sets .srows {
+  position: absolute;
+  left: 430px;
+  top: 140px;
+  width: 620px;
+}
+#sets .srow {
+  height: 80px;
+  padding: 0 26px;
+  margin-bottom: 8px;
+  font-size: calc(27px * var(--fs));
+  justify-content: space-between;
+}
+#sets .srow.on {
+  background: rgba(255, 255, 255, 0.1);
+}
+#sets .lb {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#sets .st {
+  font-size: 22px;
+  opacity: 0.65;
+  margin-left: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 55%;
+}
+#sets .sopts {
+  position: absolute;
+  left: 1100px;
+  top: 600px;
+  width: 760px;
+}
+#sets .sot {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink2);
+  margin: 0 0 4px 20px;
+}
+#sets .sopt {
+  height: 60px;
+  padding: 0 20px;
+  margin-bottom: 6px;
+  font-size: calc(23px * var(--fs));
+  background: rgba(255, 255, 255, 0.04);
+}
+#sets .sopt .lb {
+  flex: 1;
+}
+#sets .sopt.dim {
+  opacity: 0.6;
+}
+#sets .rad {
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+  margin-right: 16px;
+  flex: none;
+}
+#sets .rad.on {
+  border-color: var(--acc);
+  background: radial-gradient(var(--acc) 40%, transparent 46%);
+}
+#sets .sopt.f .rad {
+  border-color: var(--acc-ink);
+}
+#sets .sopt.f .rad.on {
+  background: radial-gradient(var(--acc-ink) 40%, transparent 46%);
+}
+#sets .more {
+  height: 22px;
+}
+#sets .snote,
+#sets .shint {
+  padding: 10px 20px 0;
+  font-size: calc(21px * var(--fs));
+  line-height: 1.35;
+  color: var(--ink2);
+  white-space: normal;
+}
+/* Home in the window: every layer of it scaled to 760 px wide and moved there (layers placed lower on the screen move up by what the
+   scale takes off their offset); the wallpaper moves to its own layer for that, still */
+body.peek {
+  background-image: none;
+}
+body.peek #wall {
+  display: block;
+}
+body.peek #wall,
+body.peek .wp,
+body.peek .wpd,
+body.peek .glow,
+body.peek #top,
+body.peek #cards,
+body.peek #plw {
+  transform-origin: 0 0;
+  transform: translate(1100px, 150px) scale(0.39583);
+  -webkit-animation: none;
+  animation: none;
+}
+body.peek #view {
+  transform-origin: 0 0;
+  transform: translate(1100px, calc(150px - var(--view-top) * 0.60417)) scale(0.39583);
+}
+body.peek #shelf {
+  transform-origin: 0 0;
+  transform: translate(1100px, calc(150px - var(--name-y) * 0.60417)) scale(0.39583);
+}
+#sets .sqr {
+  width: 760px;
+  height: 428px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#sets .sqr svg {
+  width: 400px;
+  height: 400px;
+}

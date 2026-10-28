@@ -286,6 +286,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
       'suntheme',
       'wallpapers',
       'cards',
+      'spotify', // Spotify on Home (spotify.js)
       'inputkey',
       'notifyapi',
       'manager',

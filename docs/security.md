@@ -5,15 +5,16 @@
 CleanYourTV runs a service **as root** on a rooted TV. It listens on `127.0.0.1:8765` only. A few short-lived pages open on the
 local network on request, and an optional notification endpoint is off by default.
 
-| Port | What | When it is open |
-|---|---|---|
-| 8765 (`127.0.0.1` only) | The service API | Always; see [Service API](api.md) |
-| 8766 | Live TV pairing page | While you set up Live TV: a 6-digit code shown on the TV, ten minutes |
-| 8767 | Network notifications | Only when you switch it on in the manager app; needs a token |
-| 8768 and up | Share-log page | Ten minutes, at a random address, with a masked report |
-| 8769 | Voice setup page | Ten minutes, at a random 128-bit address, closed after saving |
-| 8791 | Wallpapers page | While the QR screen is open in the manager app: a 6-digit code shown on the TV, at most an hour; see [Wallpapers](wallpapers.md) |
-| 8792 | Cards page | The same, for the options of the cards on Home; see [Cards](launcher.md#cards) |
+| Port                    | What                  | When it is open                                                                                                                           |
+| ----------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| 8765 (`127.0.0.1` only) | The service API       | Always; see [Service API](api.md)                                                                                                         |
+| 8766                    | Live TV pairing page  | While you set up Live TV: a 6-digit code shown on the TV, ten minutes                                                                     |
+| 8767                    | Network notifications | Only when you switch it on in the manager app; needs a token                                                                              |
+| 8768 and up             | Share-log page        | Ten minutes, at a random address, with a masked report                                                                                    |
+| 8769                    | Voice setup page      | Ten minutes, at a random 128-bit address, closed after saving                                                                             |
+| 8791                    | Wallpapers page       | While the QR screen is open in the manager app: a 6-digit code shown on the TV, at most an hour; see [Wallpapers](wallpapers.md)          |
+| 8792                    | Cards page            | The same, for the options of the cards on Home; see [Cards](launcher.md#cards)                                                            |
+| 8793                    | Spotify page          | While you link Spotify: at most 15 minutes, at a random address, closed after linking; see [Spotify on Home](launcher.md#spotify-on-home) |
 
 What the setup changes on the TV is listed in [What it changes on the TV](tv-changes.md).
 
@@ -88,8 +89,8 @@ the package and launcher names the updater already expects.
 - The service API refuses requests from web pages (any `http(s)` origin); local apps and scripts are accepted.
 
 !!! tip "Move from telnet to SSH"
-    A rooted TV often has an unauthenticated telnet server open on the local network. Turn telnet off and SSH on in the
-    Homebrew Channel's settings.
+A rooted TV often has an unauthenticated telnet server open on the local network. Turn telnet off and SSH on in the
+Homebrew Channel's settings.
 
 ## Reporting
 

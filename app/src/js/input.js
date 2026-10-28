@@ -62,6 +62,10 @@ document.addEventListener('keydown', function (e) {
     LIVE.key(e);
     return;
   }
+  if (SET.on) {
+    if (setKey(k)) e.preventDefault(); // the Customise screen (settings.js)
+    return;
+  }
   if (stack.length) {
     if (k === 13) {
       if (downEnter && Date.now() - lastEnter < 1500) {
@@ -209,6 +213,7 @@ document.addEventListener('visibilitychange', function () {
       return;
     }
     WALL.hidden();
+    PLAYER.hidden();
     if (LIVE.on) LIVE.exit();
     closeRunningMenu();
   } else if (guarded()) LIVE.resume();
@@ -218,6 +223,7 @@ document.addEventListener('visibilitychange', function () {
     liveBlip = false;
     load();
     WALL.shown();
+    PLAYER.shown();
   }
 });
 

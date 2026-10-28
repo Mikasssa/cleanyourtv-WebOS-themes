@@ -11,15 +11,17 @@ function useLang(code) {
 }
 /* a button's label: built-in buttons are translated, buttons you added keep the app's own name */
 function barLabel(o) {
-  return o.action === 'inputs'
-    ? t('Inputs')
-    : o.app === 'com.palm.app.settings'
-      ? t('Settings')
-      : o.action === 'customize'
-        ? t('Customise')
-        : o.action === 'live'
-          ? t('Live TV')
-          : o.label || '';
+  return o.action === 'player'
+    ? PLAYER.label(o)
+    : o.action === 'inputs'
+      ? t('Inputs')
+      : o.app === 'com.palm.app.settings'
+        ? t('Settings')
+        : o.action === 'customize'
+          ? t('Customise')
+          : o.action === 'live'
+            ? t('Live TV')
+            : o.label || '';
 }
 function clockOpts() {
   var c = cfg.clock,

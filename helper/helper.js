@@ -58,6 +58,7 @@ load('theme', () => require('./theme').create(ctx));
 load('suntheme', () => require('./suntheme').create(ctx));
 load('wallpapers', () => require('./wallpapers').create(ctx));
 load('cards', () => require('./cards').create(ctx));
+load('spotify', () => require('./spotify').create(ctx));
 const inputkey = load('inputkey', () => require('./inputkey').create(ctx));
 if (notify) load('notifyapi', () => require('./notifyapi').create(ctx));
 const manager = load('manager', () => require('./manager').create(ctx));

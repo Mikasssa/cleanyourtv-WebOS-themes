@@ -5,6 +5,7 @@ function saveCfg() {
   });
   store();
   rebuild();
+  PLAYER.sync(); /* Customise > Player */
   WALL.sync(); /* a changed Wallpapers setting (on, off, the interval) takes effect at once, not only the next time Home opens */
 }
 function isHidden(id) {
@@ -79,7 +80,8 @@ function act(e) {
   }
   var o = e._o || {};
   if (o.action === 'card') return cardAct(e);
-  if (o.action === 'customize') return customizeMenu();
+  if (o.action === 'customize') return setOpen();
+  if (o.action === 'player') return PLAYER.cmd(o.cmd);
   if (o.action === 'live') return LIVE.enter();
   if (o.action === 'inputs') return inputsMenu();
   if (o.app) launch(o.app, o.params);
