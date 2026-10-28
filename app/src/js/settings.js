@@ -152,19 +152,18 @@ function setCats() {
           { label: t('Wallpapers'), value: cfg.wall && cfg.wall.on ? t('On') : t('Off'), open: wallMenu },
           {
             label: t('Glow behind the apps'),
-            value: cfg.noGlow === true ? t('Off') : t('On'),
+            value: glowMode() === 'on' ? t('On') : glowMode() === 'off' ? t('Off') : t('Theme'),
             open: choiceMenu(
               t('Glow behind the apps'),
               [
-                [false, t('On')],
-                [true, t('Off')],
+                ['', t('Theme')],
+                ['on', t('On')],
+                ['off', t('Off')],
               ],
-              function () {
-                return cfg.noGlow === true;
-              },
+              glowMode,
               function (v) {
-                if (v) cfg.noGlow = true;
-                else delete cfg.noGlow;
+                if (v) cfg.glow = v;
+                else delete cfg.glow;
               }
             ),
           },

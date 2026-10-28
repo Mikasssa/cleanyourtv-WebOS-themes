@@ -2682,7 +2682,7 @@ function appGlow(e) {
   return id && /^youtube\.leanback\.v\d+$/.test(id) ? '255,255,255' : '';
 }
 function glowNow(e) {
-  var col = TH.glow || appGlow(e) || e.style.getPropertyValue('--c') || '74,84,112';
+  var col = (glowMode() !== 'on' && TH.glow) || appGlow(e) || e.style.getPropertyValue('--c') || '74,84,112';
   if (col === gColor) return;
   gColor = col;
   var on = gSide ? $('gB') : $('gA'),
@@ -3272,6 +3272,7 @@ var TH0 = {
     glow: '',
     slots: [],
     labels: '',
+    glowPos: '',
   },
   TH = TH0,
   themeKeys = [],
@@ -3297,6 +3298,7 @@ function applyTheme(t) {
   if (!t || !t.vars) {
     TH = TH0;
     applyLabels();
+    applyGlow();
     return;
   }
   for (k in t.vars) {
@@ -3350,8 +3352,25 @@ function applyTheme(t) {
     glow: t.glowRgb || '',
     slots: t.slots || [],
     labels: (t.attrs && t.attrs.labels) || '',
+    glowPos: (t.attrs && t.attrs.glow) || '',
   };
   applyLabels();
+  applyGlow();
+}
+/* Customise > Glow behind the apps, in every theme: 'on' a large light in the focused app's colour behind the middle of the screen (as
+   in Spotlight), 'off' none, '' (unset) what the theme has */
+function glowMode() {
+  return cfg.glow === 'on' || cfg.glow === 'off' ? cfg.glow : '';
+}
+function applyGlow() {
+  var b = document.body,
+    m = glowMode(),
+    pos = m === 'on' ? 'center' : TH.glowPos;
+  b.classList.toggle('noglow', m === 'off');
+  if (m === 'on') b.style.setProperty('--glow-op', '1');
+  else b.style.removeProperty('--glow-op');
+  if (pos) b.setAttribute('data-glow', pos);
+  else b.removeAttribute('data-glow');
 }
 /* Customise > Top button labels: icons only or icons with text, or (unset) what the theme chose */
 function barLabelsMode() {
@@ -5433,19 +5452,18 @@ function setCats() {
           { label: t('Wallpapers'), value: cfg.wall && cfg.wall.on ? t('On') : t('Off'), open: wallMenu },
           {
             label: t('Glow behind the apps'),
-            value: cfg.noGlow === true ? t('Off') : t('On'),
+            value: glowMode() === 'on' ? t('On') : glowMode() === 'off' ? t('Off') : t('Theme'),
             open: choiceMenu(
               t('Glow behind the apps'),
               [
-                [false, t('On')],
-                [true, t('Off')],
+                ['', t('Theme')],
+                ['on', t('On')],
+                ['off', t('Off')],
               ],
-              function () {
-                return cfg.noGlow === true;
-              },
+              glowMode,
               function (v) {
-                if (v) cfg.noGlow = true;
-                else delete cfg.noGlow;
+                if (v) cfg.glow = v;
+                else delete cfg.glow;
               }
             ),
           },
@@ -5683,8 +5701,7 @@ function setKey(k) {
 function rebuild() {
   /* Customise > Wallpaper motion: a theme's moving wallpaper held still */
   document.body.classList.toggle('still', cfg.noDrift === true);
-  /* Customise > Glow behind the apps: off hides the theme's coloured light */
-  document.body.classList.toggle('noglow', cfg.noGlow === true);
+  applyGlow();
   applyLabels();
   var by = {};
   apps.forEach(function (a) {

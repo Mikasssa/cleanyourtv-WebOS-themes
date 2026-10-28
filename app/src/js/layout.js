@@ -2,8 +2,7 @@
 function rebuild() {
   /* Customise > Wallpaper motion: a theme's moving wallpaper held still */
   document.body.classList.toggle('still', cfg.noDrift === true);
-  /* Customise > Glow behind the apps: off hides the theme's coloured light */
-  document.body.classList.toggle('noglow', cfg.noGlow === true);
+  applyGlow();
   applyLabels();
   var by = {};
   apps.forEach(function (a) {

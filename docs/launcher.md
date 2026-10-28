@@ -8,8 +8,8 @@ same on every supported webOS version.
 ## The screen
 
 - **Dock.** Up to four apps, large, on the first row.
-- **Top shelf.** The name of the focused app and an ambient glow taken from its icon (**Customise** > **Glow behind the apps** switches
-  it off).
+- **Top shelf.** The name of the focused app and an ambient glow taken from its icon (**Customise** > **Glow behind the apps**: *Theme*,
+  *On* for a large light in the app's colour behind the middle of the screen in any theme, as in Spotlight, or *Off*).
 - **Grid.** All other apps, sorted by how often you use each one (or A to Z).
 - **Top buttons.** Inputs, Live TV, Settings and Customise, and a clock. The buttons you see are yours to change. **Customise** > **Top button labels**
   shows them as icons only or as icons with their names; left on **Theme**, the theme decides.

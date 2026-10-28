@@ -20,7 +20,7 @@ const LAUNCHER_KEYS = [
   'topbar',
   'runDots',
   'noDrift',
-  'noGlow',
+  'glow',
   'wallTint',
   'iconStyle',
   'barLabels',

@@ -12,6 +12,7 @@ var TH0 = {
     glow: '',
     slots: [],
     labels: '',
+    glowPos: '',
   },
   TH = TH0,
   themeKeys = [],
@@ -37,6 +38,7 @@ function applyTheme(t) {
   if (!t || !t.vars) {
     TH = TH0;
     applyLabels();
+    applyGlow();
     return;
   }
   for (k in t.vars) {
@@ -90,8 +92,25 @@ function applyTheme(t) {
     glow: t.glowRgb || '',
     slots: t.slots || [],
     labels: (t.attrs && t.attrs.labels) || '',
+    glowPos: (t.attrs && t.attrs.glow) || '',
   };
   applyLabels();
+  applyGlow();
+}
+/* Customise > Glow behind the apps, in every theme: 'on' a large light in the focused app's colour behind the middle of the screen (as
+   in Spotlight), 'off' none, '' (unset) what the theme has */
+function glowMode() {
+  return cfg.glow === 'on' || cfg.glow === 'off' ? cfg.glow : '';
+}
+function applyGlow() {
+  var b = document.body,
+    m = glowMode(),
+    pos = m === 'on' ? 'center' : TH.glowPos;
+  b.classList.toggle('noglow', m === 'off');
+  if (m === 'on') b.style.setProperty('--glow-op', '1');
+  else b.style.removeProperty('--glow-op');
+  if (pos) b.setAttribute('data-glow', pos);
+  else b.removeAttribute('data-glow');
 }
 /* Customise > Top button labels: icons only or icons with text, or (unset) what the theme chose */
 function barLabelsMode() {
