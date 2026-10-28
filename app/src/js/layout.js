@@ -65,6 +65,7 @@ function rebuild() {
   setFocus(nr, nc, true);
   markRunning();
   darkSync(); /* Customise > App icons */
+  TINT.sync(); /* Customise > Accent colour > From the wallpaper */
 }
 
 /* the apps that are open get a green dot; read each time Home is shown, kept only in memory */
@@ -115,7 +116,11 @@ function load() {
       if (sig === lastSig) return;
       lastSig = sig;
       apps = x.apps.map(function (a) {
-        return a.input ? { id: a.id, title: a.title, input: a.input, off: !!a.off } : { id: a.id, title: a.title };
+        return a.input
+          ? { id: a.id, title: a.title, input: a.input, off: !!a.off }
+          : a.own
+            ? { id: a.id, title: a.title, own: true } // an icon of your own (darkicons.js)
+            : { id: a.id, title: a.title };
       });
       cfg = x.config || {};
       useLang(cfg.lang);

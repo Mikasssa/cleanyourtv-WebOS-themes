@@ -62,7 +62,9 @@ system apps are never in it. The list is read when it opens and closes when you 
   [your own icons](#your-own-icons). In _Dark_, holding OK on an app gives **Logo colours**: _Its own_ or _One colour_, for a logo
   whose colours do not sit well on the dark tile;
 - the **clock** format (automatic, 12 or 24 hour);
-- the **theme** (see [Themes](themes.md)) and the **accent colour**; the theme list shows each theme's screenshot;
+- the **theme** (see [Themes](themes.md)) and the **accent colour**; the theme list shows each theme's screenshot. **From the wallpaper**,
+  first in the accent colours, takes the main colour of the picture behind Home (the theme's wallpaper, or the photo Wallpapers shows)
+  for the accent, the focus ring and the dock's panel, and follows each new photo; a picture without a clear colour keeps the theme's;
 - **Wallpapers**: your own photos behind Home, and how often they change (see [Wallpapers](wallpapers.md));
 - **wallpaper motion**, where the theme's wallpaper drifts slowly: _Slow drift_ or _Still_;
 - **More settings...**, which opens the [manager app](manager.md) for everything the TV and the service do.
@@ -156,6 +158,7 @@ Settings are stored on the TV in `/media/developer/cleanyourtv/config.json`:
 | `runDots`      | `true` shows a green dot on open apps (off by default).                                                                                                                                  |
 | `iconStyle`    | `dark`: every app icon without its own background, on one dark tile colour; `mono`: the same with every logo in one light colour (Customise > App icons). Absent: the icons as they are. |
 | `monoIcons`    | App ids whose logo is in one light colour also in the _Dark_ icon style (hold OK on the app > **Logo colours**).                                                                         |
+| `wallTint`     | `true`: the accent, the focus ring and the dock take the wallpaper's colour (Customise > Accent colour > From the wallpaper).                                                            |
 | `noDrift`      | `true` holds a theme's moving wallpaper still (Customise > Wallpaper motion).                                                                                                            |
 
 See [`config.example.json`](https://github.com/lasharor/cleanyourtv-WebOS/blob/main/config.example.json). Change settings in

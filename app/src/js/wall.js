@@ -48,6 +48,7 @@ var WALL = (function () {
       dim();
       document.body.classList.add('wpon');
       cur = id;
+      TINT.photo(url);
     };
     im.src = url;
   }
@@ -64,6 +65,7 @@ var WALL = (function () {
   }
   function off() {
     clearInterval(timer);
+    TINT.photo('');
     document.body.classList.remove('wpon');
     if (els) {
       els[0].classList.remove('on');

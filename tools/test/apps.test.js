@@ -83,6 +83,10 @@ run(async () => {
   const mono = config.get().iconStyle === 'mono';
   await call(apps, '/api/config', 'POST', { dock: ['a.one'], iconStyle: 'neon' });
   ok(mono && config.get().iconStyle === undefined, 'the icon style is saved when it is dark or mono, else left out');
+  await call(apps, '/api/config', 'POST', { dock: ['a.one'], wallTint: true });
+  const wt = config.get().wallTint === true;
+  await call(apps, '/api/config', 'POST', { dock: ['a.one'], wallTint: 'yes' });
+  ok(wt && config.get().wallTint === undefined, 'colours from the wallpaper are saved only when switched on');
   await call(apps, '/api/config', 'POST', { dock: ['a.one'], monoIcons: ['a.one', 7] });
   const mi = config.get().monoIcons;
   await call(apps, '/api/config', 'POST', { dock: ['a.one'], monoIcons: [] });

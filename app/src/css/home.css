@@ -280,7 +280,7 @@ body {
   z-index: 4;
   padding: var(--dock-pad);
   border-radius: calc(var(--dock-rad) + var(--dock-pad));
-  background: rgba(255, 255, 255, var(--dock-panel));
+  background: rgba(var(--dock-tint, 255, 255, 255), var(--dock-panel)); /* --dock-tint: from the wallpaper (walltint.js) */
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, calc(var(--dock-panel) * 1.4));
 }
 #dock > * + * {

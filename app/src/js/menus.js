@@ -843,18 +843,36 @@ function accentMenu() {
   themeList(function (data) {
     var at = 0,
       build = function () {
-        var cur = (data.current && data.current.accent) || '';
-        return (data.accents || []).map(function (a, i) {
-          if (a.hex === cur) at = i;
-          return {
-            label: a.name === 'Theme default' ? t('Theme default') : t(a.name), // the other names are colours the service lists
-            sub: a.hex === cur ? t('Selected') : '',
+        var cur = (data.current && data.current.accent) || '',
+          wall = cfg.wallTint === true;
+        /* first: the wallpaper's colour, also for the dock (walltint.js); choosing any other colour turns it off */
+        return [
+          {
+            label: t('From the wallpaper'),
+            sub: wall ? t('Selected') : t('Accent and dock'),
             stay: true,
             fn: function () {
-              themeCall('/api/theme/set', { accent: a.hex }, update);
+              cfg.wallTint = true;
+              saveCfg();
             },
-          };
-        });
+          },
+        ].concat(
+          (data.accents || []).map(function (a, i) {
+            if (!wall && a.hex === cur) at = i + 1;
+            return {
+              label: a.name === 'Theme default' ? t('Theme default') : t(a.name), // the other names are colours the service lists
+              sub: !wall && a.hex === cur ? t('Selected') : '',
+              stay: true,
+              fn: function () {
+                if (wall) {
+                  delete cfg.wallTint;
+                  saveCfg();
+                }
+                themeCall('/api/theme/set', { accent: a.hex }, update);
+              },
+            };
+          })
+        );
       },
       update = function (r) {
         data = r;
