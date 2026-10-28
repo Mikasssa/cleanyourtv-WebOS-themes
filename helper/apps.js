@@ -172,6 +172,7 @@ function create(ctx) {
     if (strs(b.monoIcons) && strs(b.monoIcons).length) out.monoIcons = strs(b.monoIcons); // apps whose logo is in one colour in Dark
     if (b.wallTint === true) out.wallTint = true; // Customise > Accent colour > From the wallpaper
     if (b.noDrift === true) out.noDrift = true; // a theme's moving wallpaper held still (on unless switched off)
+    if (b.noGlow === true) out.noGlow = true; // Customise > Glow behind the apps: off (on unless switched off)
     // Wallpapers in the launcher: on or off, and how often the photo changes
     if (b.wall && typeof b.wall === 'object') {
       // secs: how often the photo changes while Home is shown, in seconds (0: each time Home opens); "every" (minutes) came before it

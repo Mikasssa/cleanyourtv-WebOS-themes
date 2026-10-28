@@ -112,6 +112,10 @@ body {
 .glow.on {
   opacity: var(--glow-op);
 }
+/* Customise > Glow behind the apps: Off */
+.noglow .glow.on {
+  opacity: 0;
+}
 /* effects.glowPos "center": a large soft light behind the middle of the screen, in the focused app's colour */
 [data-glow="center"] .glow {
   height: 1080px;
