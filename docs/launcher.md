@@ -47,8 +47,7 @@ system apps are never in it. The list is read when it opens and closes when you 
 
 ![Customise menu](screenshots/customise.jpg)
 
-**Customise** holds how Home looks. It is a full screen: categories on the left (**Home & dock**, **Look**, **Background**, **Player**,
-**More**), the settings of the chosen one in the middle, and on the right Home itself in a window with the options of a setting below
+**Customise** holds how Home looks. It is a full screen: categories on the left (**Home & dock**, **Look**, **Background**, **More**), the settings of the chosen one in the middle, and on the right Home itself in a window with the options of a setting below
 it, so every change shows at once. Up and Down move in a column, Right or OK goes a column further (OK on a setting opens its options,
 OK on an option chooses it), Left goes back a column, and Back on the categories closes the screen. The settings:
 
@@ -70,28 +69,9 @@ OK on an option chooses it), Left goes back a column, and Back on the categories
   for the accent, the focus ring and the dock's panel, and follows each new photo; a picture without a clear colour keeps the theme's;
 - **Wallpapers**: your own photos behind Home, and how often they change (see [Wallpapers](wallpapers.md));
 - **wallpaper motion**, where the theme's wallpaper drifts slowly: _Slow drift_ or _Still_;
-- the **player** (see [Spotify on Home](#spotify-on-home));
 - **More settings...**, which opens the [manager app](manager.md) for everything the TV and the service do.
 
 Putting the dock, buttons, hidden apps, order and clock back to the defaults is in the manager app: **Reset Home customisation**.
-
-## Spotify on Home
-
-What plays on your Spotify account, with buttons to steer it: in Spotify on this TV, on a phone or on a speaker (Spotify Connect).
-**Customise** > **Player** chooses how it looks: a **Small card** under the clock, a **Bar above the dock** in the cover's colours (with a
-button that moves the music to this TV), a **Large panel**, or the **Dock tile**: the Spotify tile in the dock shows the cover, and its
-buttons appear above it while it has the focus. It shows only while something is loaded in Spotify; Up from the dock reaches the
-buttons. The buttons need Spotify Premium.
-
-Linking, once: **Customise** > **Player** > **Spotify account** shows a QR code for a page on your phone (same Wi-Fi), which goes
-through three steps:
-
-1. Create your own Spotify app (free) on developer.spotify.com > Dashboard, type Web API, with exactly
-   `http://127.0.0.1:8770/callback` as its Redirect URI, and paste its Client ID on the page.
-2. **Log in to Spotify** on the page.
-3. The browser then opens a page that does not load (127.0.0.1): copy its address from the address bar and paste it on the page.
-
-The TV keeps the login in its settings (`spotify` in `config.json`, never sent to the launcher). **Unlink** forgets it.
 
 ## Your own icons
 
@@ -181,7 +161,6 @@ Settings are stored on the TV in `/media/developer/cleanyourtv/config.json`:
 | `iconStyle`    | `dark`: every app icon without its own background, on one dark tile colour; `mono`: the same with every logo in one light colour (Customise > App icons). Absent: the icons as they are. |
 | `monoIcons`    | App ids whose logo is in one light colour also in the _Dark_ icon style (hold OK on the app > **Logo colours**).                                                                         |
 | `wallTint`     | `true`: the accent, the focus ring and the dock take the wallpaper's colour (Customise > Accent colour > From the wallpaper).                                                            |
-| `player`       | `card`, `bar`, `panel` or `tile`: how the Spotify player looks (Customise > Player). Absent: no player.                                                                                  |
 | `noDrift`      | `true` holds a theme's moving wallpaper still (Customise > Wallpaper motion).                                                                                                            |
 
 See [`config.example.json`](https://github.com/lasharor/cleanyourtv-WebOS/blob/main/config.example.json). Change settings in

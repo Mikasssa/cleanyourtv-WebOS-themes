@@ -21,7 +21,6 @@ const LAUNCHER_KEYS = [
   'runDots',
   'noDrift',
   'wallTint',
-  'player',
   'iconStyle',
   'monoIcons',
   'wall',

@@ -69,7 +69,6 @@ function setFocus(nr, nc, first) {
     nm = a ? a.title : e._o ? barLabel(e._o) : '',
     n = $('name');
   if (n.textContent !== nm) n.textContent = nm;
-  PLAYER.focus(e); /* the dock-tile player shows its buttons */
   if (first) glowNow(e);
   else glowSoon(e);
   var sh = 0;

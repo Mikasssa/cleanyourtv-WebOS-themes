@@ -314,8 +314,7 @@ body.peek .wp,
 body.peek .wpd,
 body.peek .glow,
 body.peek #top,
-body.peek #cards,
-body.peek #plw {
+body.peek #cards {
   transform-origin: 0 0;
   transform: translate(1100px, 150px) scale(0.39583);
   -webkit-animation: none;
@@ -328,16 +327,4 @@ body.peek #view {
 body.peek #shelf {
   transform-origin: 0 0;
   transform: translate(1100px, calc(150px - var(--name-y) * 0.60417)) scale(0.39583);
-}
-#sets .sqr {
-  width: 760px;
-  height: 428px;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#sets .sqr svg {
-  width: 400px;
-  height: 400px;
 }

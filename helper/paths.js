@@ -19,8 +19,6 @@ module.exports = {
   LIVE: env.CYTV_LIVE_DIR || D + '/live',
   THEMES: env.CYTV_THEMES || path.join(__dirname, 'themes'),
   VOICE: D + '/voice',
-  // the QR code library the package installs with the manager app; the Spotify phone page draws its code with it
-  QRLIB: env.CYTV_QRLIB || '/media/developer/apps/usr/palm/applications/com.cleanyourtv.manager/qrcode.js',
   ICONS: D + '/icons', // your own app icons: <app id>.png (or .webp, .jpg, .svg), shown instead of the app's
   WEATHER: D + '/weather.json', // the weather card's last answers (weather.js)
   HOOK: D + '/inputhook',

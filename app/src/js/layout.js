@@ -50,8 +50,7 @@ function rebuild() {
     });
   /* cards come first, so the ones OK can switch (a Home Assistant light) join the top row */
   drawCards();
-  var pl = PLAYER.targets(),
-    top = PLAYER.first() ? pl.concat(tb, cardTargets()) : tb.concat(cardTargets(), pl); /* the player's buttons (player.js) */
+  var top = tb.concat(cardTargets());
   rows = [top, d.length ? d : top];
   for (var i = 0; i < g.length; i += TH.cols) rows.push(g.slice(i, i + TH.cols));
   var nr = Math.min(r, rows.length - 1),
@@ -130,7 +129,6 @@ function load() {
       store();
       rebuild();
       WALL.sync();
-      PLAYER.sync();
       if (!perfReady) {
         perfReady = true;
         perfMark('launcher ready ' + Math.round(performance.now()));

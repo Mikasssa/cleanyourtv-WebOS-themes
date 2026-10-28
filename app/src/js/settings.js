@@ -157,7 +157,6 @@ function setCats() {
         ),
       },
     ];
-  if (typeof playerRows === 'function') cats.push({ icon: 'music', label: t('Player'), rows: playerRows() });
   cats.push({
     icon: 'settings',
     label: t('More'),
@@ -189,7 +188,6 @@ function setClose() {
   if (SET.el) SET.el.remove();
   SET.el = null;
   document.body.classList.remove('peek');
-  PLAYER.place();
 }
 function setEsc(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -274,8 +272,6 @@ function setDraw() {
   var fi = m && m.items[m.idx],
     w = SET.el.querySelector('.swin');
   if (fi && fi.pv) w.innerHTML = '<img alt="" src="' + API + '/api/theme/preview/' + encodeURIComponent(fi.pv) + '">';
-  /* a QR code (Spotify's phone page) stands in the window while its row has the focus */
-  if (fi && fi.qr) w.innerHTML = '<div class="sqr">' + fi.qr + '</div>';
   setClicks();
 }
 /* the Magic Remote's pointer: a click does what OK does there */
