@@ -59,12 +59,12 @@ OK on an option chooses it), Left goes back a column, and Back on the categories
 - **mark running apps** (a green dot on their tiles, or none);
 - **app icons**: every logo is shown at the same width in every tile (its height follows its proportions), whatever the icon's own margins. _Original_: the icon with its
   own background (the tile takes that background); _Dark_: the logo alone, in its colours, on one dark tile colour, so the icons look
-  like one set; _Dark, one colour_: the same with every logo in one light colour. The background is taken out on the TV from each
+  like one set (a logo of your own takes, in _Original_, the colour of its app's own icon, in light ink where it would barely show); _Dark, one colour_: the same with every logo in one light colour. The background is taken out on the TV from each
   app's own icon; an icon that is a picture without a plain background stays as it is. For the cleanest result, use
   [your own icons](#your-own-icons). In _Dark_, holding OK on an app gives **Logo colours**: _Its own_ or _One colour_, for a logo
   whose colours do not sit well on the dark tile;
 - the **clock** format (automatic, 12 or 24 hour);
-- the **theme** (see [Themes](themes.md)) and the **accent colour**; the theme list shows each theme's screenshot. **From the wallpaper**,
+- the **theme** (see [Themes](themes.md)) and the **accent colour**; the theme list shows each theme's screenshot. **Your own colour...**, last in the list, sets the accent by hue, saturation and lightness with Left and Right, shown on Home at once. **From the wallpaper**,
   first in the accent colours, takes the main colour of the picture behind Home (the theme's wallpaper, or the photo Wallpapers shows)
   for the accent, the focus ring and the dock's panel, and follows each new photo; a picture without a clear colour keeps the theme's;
 - **Wallpapers**: your own photos behind Home, and how often they change (see [Wallpapers](wallpapers.md));

@@ -504,11 +504,29 @@ function barMenu(o) {
 }
 /* Wallpapers: switched on here and how often the photo changes; the photos are added in the manager (uploads from a phone, Immich) */
 function wallMenu() {
+  var photos = [];
+  api('/api/wallpapers/list').then(
+    function (x) {
+      photos = (x && x.photos) || [];
+      if (stack.length) refreshMenu();
+    },
+    function () {}
+  );
+  var setWall = function (patch) {
+    var w = cfg.wall || { on: false },
+      n = { on: !!w.on, secs: wallSecs() };
+    if (w.pick) n.pick = w.pick;
+    for (var k in patch) n[k] = patch[k];
+    if (!n.pick) delete n.pick;
+    cfg.wall = n;
+    saveCfg();
+  };
   openBuilt(t('Wallpapers'), function () {
     var w = cfg.wall || { on: false },
       e = wallSecs(),
-      n = +String((cfg.wallpapers && cfg.wallpapers.stamp) || '0').split(':')[0] || 0,
+      n = photos.length || +String((cfg.wallpapers && cfg.wallpapers.stamp) || '0').split(':')[0] || 0,
       EV = [0, 10, 30, 60, 180, 300, 900, 3600],
+      pk = w.pick && photos.indexOf(w.pick) >= 0 ? w.pick : '',
       name = function (x) {
         return !x
           ? t('Each time Home opens')
@@ -524,18 +542,58 @@ function wallMenu() {
         sub: (w.on ? t('On') : t('Off')) + ' \u00B7 ' + (n ? t(n + ' photos') : t('no photos yet')),
         stay: true,
         fn: function () {
-          cfg.wall = { on: !w.on, secs: e };
-          saveCfg();
+          setWall({ on: !w.on });
+        },
+      },
+      {
+        label: t('Photo'),
+        sub: pk ? t('Photo %s').replace('%s', photos.indexOf(pk) + 1) : t('All, in turn'),
+        img: pk ? API + '/api/wallpapers/photo/' + pk : '',
+        stay: true,
+        fn: function () {
+          if (!photos.length) return toast(t('No photos yet: add them in the CleanYourTV app.'), true);
+          var at = pk ? photos.indexOf(pk) + 1 : 0;
+          openBuilt(
+            t('Photo'),
+            function () {
+              var cur = (cfg.wall && cfg.wall.pick) || '';
+              return [
+                {
+                  label: t('All, in turn'),
+                  on: !cur || photos.indexOf(cur) < 0,
+                  stay: true,
+                  fn: function () {
+                    setWall({ pick: '', on: true });
+                  },
+                },
+              ].concat(
+                photos.map(function (id, i) {
+                  return {
+                    label: t('Photo %s').replace('%s', i + 1),
+                    sub: id.charAt(0) === 'i' ? 'Immich' : '',
+                    img: API + '/api/wallpapers/photo/' + id,
+                    on: cur === id,
+                    stay: true,
+                    fn: function () {
+                      setWall({ pick: id, on: true });
+                    },
+                  };
+                })
+              );
+            },
+            at
+          );
         },
       },
       {
         label: t('New photo'),
-        sub: name(e),
+        sub: pk ? t('Off: one photo is chosen') : name(e),
+        dim: !!pk,
         stay: true,
         fn: function () {
+          if (pk) return;
           var k = EV.indexOf(e);
-          cfg.wall = { on: !!w.on, secs: EV[(k < 0 ? 6 : k + 1) % EV.length] };
-          saveCfg();
+          setWall({ secs: EV[(k < 0 ? 6 : k + 1) % EV.length] });
         },
       },
       { sep: true },
@@ -789,7 +847,25 @@ function accentMenu() {
                 themeCall('/api/theme/set', { accent: a.hex }, update);
               },
             };
-          })
+          }),
+          [
+            {
+              label: t('Your own colour...'),
+              sub:
+                !wall &&
+                cur &&
+                !(data.accents || []).some(function (a) {
+                  return a.hex === cur;
+                })
+                  ? t('Selected')
+                  : '',
+              sw: cur || '',
+              stay: true,
+              fn: function () {
+                customAccent(cur || cssVar('--acc') || '#5ac8fa', update);
+              },
+            },
+          ]
         );
       },
       update = function (r) {
@@ -798,6 +874,70 @@ function accentMenu() {
       };
     build();
     openBuilt(t('Accent colour'), build, at);
+  });
+}
+function cssVar(n) {
+  return getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+}
+function hexOf(c) {
+  return (
+    '#' +
+    c
+      .map(function (v) {
+        return ('0' + Math.max(0, Math.min(255, Math.round(v))).toString(16)).slice(-2);
+      })
+      .join('')
+  );
+}
+/* Accent colour > Your own colour: hue, saturation and lightness, changed with Left and Right (OK steps forward too). Home shows the
+   colour at once; it is saved a moment after the last change. */
+function customAccent(start, after) {
+  var m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(start || ''),
+    h = m ? rgb2hsl(parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)) : [200, 0.8, 0.6],
+    hsl = { h: Math.round(h[0] / 5) * 5, s: Math.round(h[1] * 20) * 5, l: Math.round(h[2] * 20) * 5 },
+    saveT = 0;
+  var now = function () {
+    return hexOf(hsl2rgb(hsl.h, hsl.s / 100, hsl.l / 100));
+  };
+  var show = function () {
+    var x = now(),
+      c = hsl2rgb(hsl.h, hsl.s / 100, hsl.l / 100),
+      st = document.documentElement.style;
+    st.setProperty('--acc', x);
+    st.setProperty('--focus', x);
+    st.setProperty('--acc-ink', 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2] > 150 ? '#0b0c10' : '#ffffff');
+    clearTimeout(saveT);
+    saveT = setTimeout(function () {
+      if (cfg.wallTint === true) {
+        delete cfg.wallTint;
+        saveCfg();
+      }
+      themeCall('/api/theme/set', { accent: x }, after);
+    }, 700);
+  };
+  var row = function (label, key, step, lo, hi, wrap, unit) {
+    return {
+      label: label,
+      sub: hsl[key] + unit,
+      sw: key === 'h' ? hexOf(hsl2rgb(hsl.h, 0.85, 0.55)) : now(),
+      stay: true,
+      adj: function (d) {
+        var v = hsl[key] + d * step;
+        hsl[key] = wrap ? (v + hi + step) % (hi + step) : Math.max(lo, Math.min(hi, v));
+        show();
+      },
+      fn: function () {
+        this.adj(1);
+      },
+    };
+  };
+  openBuilt(t('Your own colour'), function () {
+    return [
+      row(t('Hue'), 'h', 10, 0, 350, true, '\u00B0'),
+      row(t('Saturation'), 's', 5, 0, 100, false, '%'),
+      row(t('Lightness'), 'l', 5, 15, 90, false, '%'),
+      { note: t('Left and Right change the value. Home shows the colour at once.') },
+    ];
   });
 }
 function addButtonMenu() {

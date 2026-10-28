@@ -320,6 +320,16 @@ function cutout(img, kind) {
   info.mono = shot();
   return info;
 }
+/* how far a colour stands out from a logo of mean brightness lm (0-255): the contrast ratio of their luminances */
+function contrast(c, lm) {
+  var L = function (v) {
+      v /= 255;
+      return v <= 0.04 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    },
+    a = 0.2126 * L(c[0]) + 0.7152 * L(c[1]) + 0.0722 * L(c[2]),
+    b = L(lm);
+  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+}
 /* the logo's height in the tile, in % of the tile's height: every logo 64% of the tile's width, its height following its
    proportions, but never over 66% of the tile's height (a tall or square logo is then narrower) */
 function logoH(d, asp) {
@@ -361,10 +371,15 @@ function darkApply(d) {
       i.src = info[st];
       paint(d, { c: (d._col && d._col.c) || [74, 84, 112], b: DARK_BG });
     } else {
-      if (i.src !== d._url) i.src = d._url;
-      if (d._col) paint(d, d._col);
-      /* the picture's own background; a logo on transparency (your own icon) gets a light tile when it is dark, else the dark one */
-      var tb = info.top ? [info.top, info.bot] : info.lm < 110 ? [[240, 241, 244]] : [DARK_BG];
+      var br = info.brand,
+        tb = info.top ? [info.top, info.bot] : br ? [br.top, br.bot] : info.lm < 110 ? [[240, 241, 244]] : [DARK_BG];
+      /* the picture's own background; a logo of your own takes its app's colour (above), else a light tile when it is dark and the
+         dark one when it is light. A logo that would barely show on its app's colour is drawn in the light ink */
+      var lift = br && contrast(tb[0], info.lm) < 1.7;
+      i.src = lift ? info.mono : d._url;
+      d._lift = lift; // the light ink is the logo alone, already cropped
+      if (br) paint(d, { c: br.c, b: tb[0] });
+      else if (d._col) paint(d, d._col);
       d.style.background = 'linear-gradient(rgb(' + tb[0].join(',') + '),rgb(' + (tb[1] || tb[0]).join(',') + '))';
     }
   }
@@ -377,9 +392,9 @@ function darkApply(d) {
   /* Original: the whole picture, scaled so its logo has that height and centred on the logo; the tile crops the rest */
   var th = d.offsetHeight || 142,
     tw = d.offsetWidth || 200,
-    bx = info.box,
+    bx = d._lift ? [0, 0, 1, 1] : info.box,
     ih = ((h / 100) * th) / (bx[3] - bx[1]),
-    iw = ih * info.iasp,
+    iw = ih * (d._lift ? info.asp : info.iasp),
     s = i.style;
   s.position = 'absolute';
   s.maxWidth = 'none';
@@ -407,6 +422,29 @@ function darkNext() {
       darkBusy = false;
       darkApply(d);
       setTimeout(darkNext, 20);
+    },
+    /* a logo of your own: the tile colour comes from the app's own icon (its background, the brand's colour) */
+    brand = function (info) {
+      if (!info || !d._a.own) return done(info);
+      var o = new Image();
+      o.crossOrigin = 'anonymous';
+      o.onload = function () {
+        try {
+          var c = iconColor(o, id),
+            an = analyse(o);
+          info.brand = {
+            c: c.c,
+            top: (an && an.k !== 'logo' && (c.gt || an.top)) || c.b,
+            bot: (an && an.k !== 'logo' && (c.gb || an.bot)) || c.b,
+          };
+          if (an && an.k === 'logo') info.brand = null; // the app's own icon is a logo on transparency too: no colour to take
+        } catch (e) {}
+        done(info);
+      };
+      o.onerror = function () {
+        done(info);
+      };
+      o.src = API + '/icon/' + encodeURIComponent(id) + '/orig';
     };
   im.crossOrigin = 'anonymous';
   im.onload = function () {
@@ -417,7 +455,7 @@ function darkNext() {
     } catch (e) {
       info = '';
     }
-    done(info);
+    brand(info);
   };
   im.onerror = function () {
     done('');

@@ -255,10 +255,13 @@ function setDraw() {
         i +
         '">' +
         (it.on !== undefined ? '<i class="rad' + (it.on ? ' on' : '') + '"></i>' : it.icon ? svg(it.icon) : '') +
+        (it.sw ? '<i class="swc" style="background:' + setEsc(it.sw) + '"></i>' : '') +
         '<span class="lb">' +
         setEsc(it.label) +
         '</span>' +
+        (it.adj ? '<i class="adj">\u25C0</i>' : '') +
         (it.sub ? '<span class="st">' + setEsc(it.sub) + '</span>' : '') +
+        (it.adj ? '<i class="adj">\u25B6</i>' : '') +
         '</div>';
     }
     h += '<div class="more">' + (start + N < m.items.length ? '▼' : '') + '</div>';
@@ -272,6 +275,8 @@ function setDraw() {
   var fi = m && m.items[m.idx],
     w = SET.el.querySelector('.swin');
   if (fi && fi.pv) w.innerHTML = '<img alt="" src="' + API + '/api/theme/preview/' + encodeURIComponent(fi.pv) + '">';
+  /* a photo (Wallpapers > Photo) stands in the window while its row has the focus */
+  if (fi && fi.img) w.innerHTML = '<img alt="" src="' + setEsc(fi.img) + '">';
   setClicks();
 }
 /* the Magic Remote's pointer: a click does what OK does there */
@@ -323,6 +328,12 @@ function setKey(k) {
     ok = k === 13,
     back = k === 461 || k === 27 || k === 8;
   if (stack.length) {
+    var mi = stack[stack.length - 1].items[stack[stack.length - 1].idx];
+    if ((left || right) && mi && mi.adj) {
+      mi.adj(left ? -1 : 1); // a value changed in place (Accent colour > Your own colour)
+      refreshMenu();
+      return true;
+    }
     if (left) {
       backMenu();
       return true;

@@ -52,8 +52,14 @@ var WALL = (function () {
     };
     im.src = url;
   }
+  /* Customise > Wallpapers > Photo: one chosen photo, while it is still in the library */
+  function pick() {
+    var p = cfg.wall && cfg.wall.pick;
+    return p && list.indexOf(p) >= 0 ? p : '';
+  }
   function next() {
     if (!list.length) return;
+    if (pick()) return pick() === cur ? undefined : show(pick());
     var pick = list[Math.floor(Math.random() * list.length)];
     for (var n = 0; pick === cur && list.length > 1 && n < 8; n++) pick = list[Math.floor(Math.random() * list.length)];
     show(pick);
@@ -61,7 +67,7 @@ var WALL = (function () {
   function arm() {
     clearInterval(timer);
     var sec = wallSecs();
-    if (sec > 0 && list.length > 1) timer = setInterval(next, sec * 1000);
+    if (sec > 0 && list.length > 1 && !pick()) timer = setInterval(next, sec * 1000);
   }
   function off() {
     clearInterval(timer);
@@ -79,6 +85,7 @@ var WALL = (function () {
     var st = (cfg.wallpapers && cfg.wallpapers.stamp) || '';
     if (st === stamp && list.length) {
       dim();
+      if (pick() && pick() !== cur) next(); // a photo was chosen
       return arm();
     }
     stamp = st;

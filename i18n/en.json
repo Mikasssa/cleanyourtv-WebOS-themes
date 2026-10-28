@@ -680,5 +680,16 @@
  "Look": "Look",
  "Background": "Background",
  "OK opens it": "OK opens it",
- "OK shows the options": "OK shows the options"
+ "OK shows the options": "OK shows the options",
+ "Your own colour...": "Your own colour...",
+ "Your own colour": "Your own colour",
+ "Hue": "Hue",
+ "Saturation": "Saturation",
+ "Lightness": "Lightness",
+ "Left and Right change the value. Home shows the colour at once.": "Left and Right change the value. Home shows the colour at once.",
+ "Photo": "Photo",
+ "Photo %s": "Photo %s",
+ "All, in turn": "All, in turn",
+ "No photos yet: add them in the CleanYourTV app.": "No photos yet: add them in the CleanYourTV app.",
+ "Off: one photo is chosen": "Off: one photo is chosen"
 }

@@ -113,6 +113,11 @@ run(async () => {
         x.on('end', () => res({ code: x.statusCode, type: x.headers['content-type'], body: b }));
       })
     );
+  fs.writeFileSync(path.join(dir, 'a.one.png'), 'mine');
+  const orig = await get(sv.url + '/icon/a.one/orig'),
+    mine = await get(sv.url + '/icon/a.one');
+  fs.unlinkSync(path.join(dir, 'a.one.png'));
+  ok(mine.body === 'mine' && orig.code !== 200, "/icon/<id>/orig skips the icon of your own (the app's own is asked of the TV)");
   const own = await get(sv.url + '/icon/a.own'),
     none = await get(sv.url + '/icon/a.missing');
   sv.server.close();
@@ -138,6 +143,13 @@ run(async () => {
   ok(
     w10.on && w10.secs === 10 && wOld.secs === 300 && config.get().wall.secs === 900,
     "Wallpapers: the photo interval is saved in seconds (10 s up to an hour), an older launcher's minutes are converted, an unknown value becomes 15 min"
+  );
+  await call(apps, '/api/config', 'POST', { wall: { on: true, secs: 60, pick: 'u/abc123' } });
+  const wp = config.get().wall.pick;
+  await call(apps, '/api/config', 'POST', { wall: { on: true, secs: 60, pick: '../etc/passwd' } });
+  ok(
+    wp === 'u/abc123' && config.get().wall.pick === undefined,
+    'Wallpapers: one chosen photo is saved by its id, anything else is left out'
   );
 
   config.update('test', c => {

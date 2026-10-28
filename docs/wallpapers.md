@@ -5,12 +5,13 @@ Your own photos behind the home screen, from two sources: photos you upload from
 
 ## Switching it on
 
-In the launcher, **Customise** > **Wallpapers**:
+In the launcher, **Customise** > **Background** > **Wallpapers**:
 
 | Row | What it does |
 |---|---|
 | Use Wallpapers | On: a photo from the library replaces the theme's background, in every theme. Off: the theme as it is. |
-| New photo | When the photo changes: each time Home opens, or also every 10 or 30 seconds, every minute, or every 3, 5, 15 or 60 minutes while Home is on screen. The photos cross-fade. |
+| Photo | **All, in turn** (the photos change as set below), or one photo of the library, which then stays. The window on the right shows the focused photo. |
+| New photo | When the photo changes (not used while one photo is chosen): each time Home opens, or also every 10 or 30 seconds, every minute, or every 3, 5, 15 or 60 minutes while Home is on screen. The photos cross-fade. |
 | Add photos... | Opens the manager app on its Wallpapers screen. |
 
 The photo is chosen at random and darkened like a theme's wallpaper (the theme's own darkening, or 40 % when it has none). With

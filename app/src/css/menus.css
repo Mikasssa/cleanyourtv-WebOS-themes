@@ -153,8 +153,8 @@
   height: 428px;
   border-radius: 26px;
   box-shadow:
-    0 0 0 2px rgba(255, 255, 255, 0.18),
-    0 0 0 3000px rgba(9, 11, 16, 0.985);
+    0 0 0 2px rgba(128, 128, 128, 0.35),
+    0 0 0 3000px var(--night); /* the theme's background colour: a light theme stays light, with its dark ink */
   overflow: hidden;
 }
 #sets .swin img {
@@ -200,7 +200,7 @@
   margin-right: 16px;
 }
 #sets .scat.on {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--panel2);
   color: var(--ink);
 }
 #sets .scat.on svg {
@@ -229,7 +229,7 @@
   justify-content: space-between;
 }
 #sets .srow.on {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--panel2);
 }
 #sets .lb {
   overflow: hidden;
@@ -264,7 +264,7 @@
   padding: 0 20px;
   margin-bottom: 6px;
   font-size: calc(23px * var(--fs));
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--panel2);
 }
 #sets .sopt .lb {
   flex: 1;
@@ -276,7 +276,7 @@
   width: 24px;
   height: 24px;
   border-radius: 12px;
-  border: 3px solid rgba(255, 255, 255, 0.4);
+  border: 3px solid var(--ink2);
   margin-right: 16px;
   flex: none;
 }
@@ -327,4 +327,28 @@ body.peek #view {
 body.peek #shelf {
   transform-origin: 0 0;
   transform: translate(1100px, calc(150px - var(--name-y) * 0.60417)) scale(0.39583);
+}
+#sets .swc {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  margin-right: 16px;
+  flex: none;
+  box-shadow: inset 0 0 0 2px rgba(128, 128, 128, 0.35);
+}
+/* a value changed with Left and Right: arrows on both sides of it */
+#sets .adj {
+  font-style: normal;
+  font-size: 18px;
+  opacity: 0.55;
+  margin: 0 10px;
+}
+#sets .sopt .adj {
+  visibility: hidden;
+}
+#sets .sopt.f .adj {
+  visibility: visible;
+}
+#sets .sopt.f .swc {
+  box-shadow: 0 0 0 3px var(--acc-ink);
 }

@@ -176,6 +176,8 @@ function create(ctx) {
       // secs: how often the photo changes while Home is shown, in seconds (0: each time Home opens); "every" (minutes) came before it
       const secs = typeof b.wall.secs === 'number' ? b.wall.secs : typeof b.wall.every === 'number' ? b.wall.every * 60 : 900;
       out.wall = { on: b.wall.on === true, secs: WALL_SECS.indexOf(secs) >= 0 ? secs : 900 };
+      // one chosen photo instead of all of them in turn (Customise > Wallpapers > Photo): its id in the library
+      if (typeof b.wall.pick === 'string' && /^[ui]\/[\w.\-]{1,100}$/.test(b.wall.pick)) out.wall.pick = b.wall.pick;
     }
     // the cards in the theme's slots (Customise > Cards), checked for shape only (cards.js)
     const cards = cardsShape.sanitize(b.cards);
@@ -232,10 +234,11 @@ function create(ctx) {
       saveLauncherConfig(await body(req));
       return web.json(res, { returnValue: true });
     }
-    const m = u.match(/^\/icon\/([\w.\-]+)$/);
+    const m = u.match(/^\/icon\/([\w.\-]+)(\/orig)?$/);
     if (m) {
-      // your own icon for this app, when there is one (docs/launcher.md, Your own icons); read every time, so a new file shows at once
-      for (const ext of Object.keys(OWN_ICON)) {
+      // your own icon for this app, when there is one (docs/launcher.md, Your own icons); read every time, so a new file shows at once.
+      // /icon/<id>/orig is always the app's own icon: the launcher takes the tile colour from it under a logo of your own
+      for (const ext of m[2] ? [] : Object.keys(OWN_ICON)) {
         const own = path.join(P.ICONS, m[1] + ext);
         if (m[1] !== '.' && m[1] !== '..' && fs.existsSync(own)) {
           res.writeHead(200, { 'content-type': OWN_ICON[ext], 'cache-control': 'no-cache' });
