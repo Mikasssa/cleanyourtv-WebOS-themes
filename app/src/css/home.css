@@ -469,6 +469,31 @@ body {
   width: 156px;
   height: 156px;
 }
+/* dock.iconScale / grid.iconScale: the icon is scaled as a whole (transform), on top of the size fit() works out for it */
+#dock .tile img,
+#dock .tile svg {
+  transform: scale(var(--dock-ic, 1));
+}
+#grid .tile img,
+#grid .tile svg {
+  transform: scale(var(--grid-ic, 1));
+}
+/* an icon larger than its tile is cut off at the tile's rounded edges; the focus ring, which sits outside the tile, is then drawn
+   as a shadow against it (as for a tile that crops its picture) */
+body[data-icclip*="dock"] #dock .tile,
+body[data-icclip*="grid"] #grid .tile {
+  overflow: hidden;
+}
+body[data-icclip*="dock"] #dock .tile.f::before,
+body[data-icclip*="grid"] #grid .tile.f::before {
+  display: none;
+}
+body[data-icclip*="dock"] #dock .tile.f,
+body[data-icclip*="grid"] #grid .tile.f {
+  box-shadow:
+    0 0 0 var(--ring-w) var(--focus),
+    0 24px 36px rgba(0, 0, 0, 0.6);
+}
 #dock .tile.f {
   transform: translateY(var(--dock-lift)) scale(var(--dock-fs));
 }

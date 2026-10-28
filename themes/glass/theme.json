@@ -25,16 +25,17 @@
  "dock": {
   "anchor": "bottom",
   "align": "center",
-  "count": 6,
-  "w": 236,
+  "count": 7,
+  "w": 224,
   "h": 142,
-  "gap": 26,
+  "gap": 24,
   "radius": 44,
   "panel": 0.22,
   "panelPad": 28,
   "tileAlpha": 1,
   "tileFrost": 0.4,
   "tileFrostColor": "#ffffff",
+  "iconScale": 2,
   "lift": 14,
   "focusScale": 1.08
  },
@@ -47,6 +48,7 @@
   "gapX": 26,
   "align": "center",
   "radius": 40,
+  "iconScale": 2,
   "overlayDim": 0.55
  },
  "tile": {

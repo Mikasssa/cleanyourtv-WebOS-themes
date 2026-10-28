@@ -124,6 +124,13 @@ const SCHEMA = [
     '#ffffff',
     'Tint of the dock-tile frost (`dock.tileFrost`): a light colour for a glassy frost, a dark one to deepen the tiles.',
   ],
+  [
+    'dock.iconScale',
+    'num',
+    [0.5, 2.5],
+    1,
+    'Size of the app icons in the dock tiles; 2 doubles them. Above 1 an icon can be larger than its tile and is cut off at the tile edges.',
+  ],
   ['dock.lift', 'int', [0, 40], 10, 'How far the focused dock tile rises, in px.'],
   ['dock.focusScale', 'num', [1, 1.3], 1.05, 'Scale of the focused dock tile.'],
   [
@@ -151,6 +158,13 @@ const SCHEMA = [
   ['grid.y', 'auto', [0, 1000], null, 'Distance of the grid from the top edge, in px. Empty: under the dock, or 290 for an overlay.'],
   ['grid.clipTop', 'int', [0, 600], 300, 'Where scrolled rows disappear at the top, in px (`below` mode).'],
   ['grid.focusScale', 'num', [1, 1.4], 1.12, 'Scale of the focused tile.'],
+  [
+    'grid.iconScale',
+    'num',
+    [0.5, 2.5],
+    1,
+    'Size of the app icons in the grid tiles; 2 doubles them. Above 1 an icon can be larger than its tile and is cut off at the tile edges.',
+  ],
   ['grid.overlayDim', 'num', [0, 1], 0.95, 'Opacity of the layer behind the overlay grid.'],
   ['grid.overlayH', 'int', [200, 900], 510, 'Visible height of the overlay grid before it scrolls, in px.'],
   ['tile.gloss', 'num', [0, 1], 0, 'A light highlight on every tile.'],
@@ -460,6 +474,11 @@ function resolve(t, accent) {
         keep: sl.keep,
       };
     });
+  // only a theme with bigger or smaller icons has these keys (the same reason)
+  if (v['dock.iconScale'] !== 1) out.vars['--dock-ic'] = String(v['dock.iconScale']);
+  if (v['grid.iconScale'] !== 1) out.vars['--grid-ic'] = String(v['grid.iconScale']);
+  if (v['dock.iconScale'] > 1 || v['grid.iconScale'] > 1)
+    out.attrs.icclip = (v['dock.iconScale'] > 1 ? 'dock' : '') + (v['grid.iconScale'] > 1 ? 'grid' : '');
   // only a theme with a typeface has this key, so the replies for the other themes stay as they were
   if (v['type.fontFile']) out.font = { id: v.fontTheme || t.id, file: v['type.fontFile'] };
   return out;

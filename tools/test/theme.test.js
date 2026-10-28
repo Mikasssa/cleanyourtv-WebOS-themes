@@ -105,6 +105,17 @@ run(async () => {
     plain.vars['--greet-d'] === 'none' && plain.vars['--dock-tile-alpha'] === '1',
     'by default there is no greeting and the dock tiles are opaque'
   );
+  // dock.iconScale and grid.iconScale: the scale as a CSS variable, and the tiles crop an icon larger than themselves
+  const big = themeMod.resolve(themeMod.normalize({ dock: { iconScale: 2 }, grid: { iconScale: 9 } }, 'big'));
+  ok(
+    big.vars['--dock-ic'] === '2' && big.vars['--grid-ic'] === '2.5' && big.attrs.icclip === 'dockgrid',
+    'iconScale sets the icon scale (clamped to 2.5) and crops icons larger than the tile'
+  );
+  const small = themeMod.resolve(themeMod.normalize({ dock: { iconScale: 0.8 } }, 'small'));
+  ok(
+    small.vars['--dock-ic'] === '0.8' && !('--grid-ic' in small.vars) && !('icclip' in small.attrs) && !('--dock-ic' in plain.vars),
+    'a smaller icon is not cropped, and a theme that keeps the default size gets no icon keys'
+  );
   // dock.tileFrost and dock.tileFrostColor: a tint over the resting tiles, its colour resolved to an rgb triple
   const frost = themeMod.resolve(themeMod.normalize({ dock: { tileFrost: 0.4, tileFrostColor: '#ffffff' } }, 'frost'));
   ok(
