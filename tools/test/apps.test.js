@@ -1,6 +1,8 @@
 // The launcher's app list (apps.js): the first answer is waited for, later ones come from memory while the list is asked again.
 // Inputs pinned to Home are listed with the apps.
-const { ok, call, req, memoryConfig, run } = require('./lib');
+const fs = require('fs'),
+  path = require('path');
+const { ok, call, req, memoryConfig, run, serve } = require('./lib');
 
 run(async () => {
   let asked = 0,
@@ -81,6 +83,27 @@ run(async () => {
   const mono = config.get().iconStyle === 'mono';
   await call(apps, '/api/config', 'POST', { dock: ['a.one'], iconStyle: 'neon' });
   ok(mono && config.get().iconStyle === undefined, 'the icon style is saved when it is dark or mono, else left out');
+  // your own icon: a file named after the app in the icons folder is served instead of the app's, also for an app not on the list
+  const dir = path.join(process.env.CYTV_DIR, 'icons');
+  fs.mkdirSync(dir);
+  fs.writeFileSync(path.join(dir, 'a.own.webp'), 'webp-bytes');
+  const sv = await serve((q, rs) => apps.handle(q, rs, q.url, async () => ({})));
+  // http.get, not fetch: the tests run under Node 8 too
+  const get = u =>
+    new Promise(res =>
+      require('http').get(u, x => {
+        let b = '';
+        x.on('data', c => (b += c));
+        x.on('end', () => res({ code: x.statusCode, type: x.headers['content-type'], body: b }));
+      })
+    );
+  const own = await get(sv.url + '/icon/a.own'),
+    none = await get(sv.url + '/icon/a.missing');
+  sv.server.close();
+  ok(
+    own.code === 200 && own.type === 'image/webp' && own.body === 'webp-bytes' && none.code === 404,
+    'an icon of your own in the icons folder is served for its app'
+  );
   await call(apps, '/api/config', 'POST', {
     dock: ['a.one'],
     cards: { greeting: { type: 'greeting', name: 'Sam' }, 'x y': { type: 'a' } },

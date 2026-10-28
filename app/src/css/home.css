@@ -478,14 +478,30 @@ body {
 #grid .tile svg {
   transform: scale(var(--grid-ic, 1));
 }
-/* Customise > App icons, dark (darkicons.js): the logo alone, sized by darkSize() to the same area in every tile, on the dark tile colour; not scaled by
-   the theme's iconScale, which is meant for icons with their own background */
+/* Customise > App icons (darkicons.js): every logo the same size, set by logoH() in every style, not by the theme's iconScale.
+   Dark and one colour: the logo alone on the dark tile colour. Original (.os): the picture scaled around its logo and cropped by the
+   tile, which takes the picture's background; the focus ring is then a shadow against the tile, as for a tile that crops its picture. */
 #dock .tile.dk img,
 #grid .tile.dk img {
   width: auto;
-  max-width: 70%;
-  max-height: 56%;
+  max-width: 80%;
+  max-height: 64%;
   transform: none;
+}
+.tile.os {
+  overflow: hidden;
+}
+/* the picture is positioned now, so the dock's frost (::before) is lifted over it again */
+#dock .tile.os:not(.f)::before {
+  z-index: 1;
+}
+.tile.os.f::before {
+  display: none;
+}
+.tile.os.f {
+  box-shadow:
+    0 0 0 var(--ring-w) var(--focus),
+    0 24px 36px rgba(0, 0, 0, 0.6);
 }
 /* an icon larger than its tile is cut off at the tile's rounded edges; the focus ring, which sits outside the tile, is then drawn
    as a shadow against it (as for a tile that crops its picture) */

@@ -19,6 +19,7 @@ module.exports = {
   LIVE: env.CYTV_LIVE_DIR || D + '/live',
   THEMES: env.CYTV_THEMES || path.join(__dirname, 'themes'),
   VOICE: D + '/voice',
+  ICONS: D + '/icons', // your own app icons: <app id>.png (or .webp, .jpg, .svg), shown instead of the app's
   WEATHER: D + '/weather.json', // the weather card's last answers (weather.js)
   HOOK: D + '/inputhook',
   APP: D + '/app',

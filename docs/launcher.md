@@ -55,9 +55,11 @@ system apps are never in it. The list is read when it opens and closes when you 
 - **hidden apps** (show them again);
 - the **app order** (most used first, or A to Z);
 - **mark running apps** (a green dot on their tiles, or none);
-- **app icons**: *Original*; *Dark*, every icon without its own background on one dark tile colour, so the icons look like one set
-  (made on the TV from each app's own icon; an icon that is a picture without a plain background stays as it is); or *Dark, one
-  colour*, the same with every logo in one light colour;
+- **app icons**: every logo is shown at the same size in every tile, whatever the icon's own margins. *Original*: the icon with its
+  own background (the tile takes that background); *Dark*: the logo alone, in its colours, on one dark tile colour, so the icons look
+  like one set; *Dark, one colour*: the same with every logo in one light colour. The background is taken out on the TV from each
+  app's own icon; an icon that is a picture without a plain background stays as it is. For the cleanest result, use
+  [your own icons](#your-own-icons);
 - the **clock** format (automatic, 12 or 24 hour);
 - the **theme** (see [Themes](themes.md)) and the **accent colour**; the theme list shows each theme's screenshot;
 - **Wallpapers**: your own photos behind Home, and how often they change (see [Wallpapers](wallpapers.md));
@@ -66,6 +68,13 @@ system apps are never in it. The list is read when it opens and closes when you 
 
 Putting the dock, buttons, hidden apps, order and clock back to the defaults is in the manager app: **Reset Home customisation**.
 
+
+## Your own icons
+
+An app's icon can be replaced by a picture of your own: put it on the TV as `/media/developer/cleanyourtv/icons/<app id>.png`
+(`.webp`, `.jpg` and `.svg` work too). A logo on a transparent background works best: the launcher then needs to cut nothing out,
+in every **App icons** style. The app ids are listed by `curl -s 127.0.0.1:8765/api/apps` on the TV. Open Home again to see a new icon;
+delete the file to get the app's own icon back. Use only pictures you may use.
 
 ## Cards
 

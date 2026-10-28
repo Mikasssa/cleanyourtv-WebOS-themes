@@ -6,6 +6,7 @@
 // layout and the order by use treat it as an app; it is kept in config.json (pinnedInputs), apart from the launcher's own keys.
 const fs = require('fs'),
   path = require('path');
+const OWN_ICON = { '.png': 'image/png', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml' };
 const P = require('./paths'),
   web = require('./web'),
   exec = require('./exec'),
@@ -224,6 +225,14 @@ function create(ctx) {
     }
     const m = u.match(/^\/icon\/([\w.\-]+)$/);
     if (m) {
+      // your own icon for this app, when there is one (docs/launcher.md, Your own icons); read every time, so a new file shows at once
+      for (const ext of Object.keys(OWN_ICON)) {
+        const own = path.join(P.ICONS, m[1] + ext);
+        if (m[1] !== '.' && m[1] !== '..' && fs.existsSync(own)) {
+          res.writeHead(200, { 'content-type': OWN_ICON[ext], 'cache-control': 'no-cache' });
+          return fs.createReadStream(own).pipe(res);
+        }
+      }
       const a = (await apps()).find(x => x.id === m[1]);
       const f = a && a.icon && path.join(a.folder, a.icon);
       if (!f || !path.resolve(f).startsWith(path.resolve(a.folder)) || !fs.existsSync(f)) return web.notFound(res);
