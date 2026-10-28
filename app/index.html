@@ -2528,28 +2528,60 @@ function cutout(img, kind) {
       if (p >= S) take(p - S, p);
       if (p + S < n) take(p + S, p);
     }
-    /* the background seen through the logo (inside an O, between letters): pixels that match the background last met in their
-       row, from either side, past no more than a letter's stroke of logo (a wide shape, such as the field around a play sign, keeps
-       what is inside it) */
-    var lim = Math.round(S * 0.07);
+    /* the background seen through the logo (inside an O, between letters). Candidates: pixels that match the background last met
+       in their row, from either side (compared with that background only, so nothing creeps into the logo along its antialiased
+       edge). A group of them (4-connected) is taken out when it is more than a sliver (at least 3 rows, 3 columns and 12 pixels: a
+       thin streak would show as a line) and the logo around it is thin: within lim of it, at least a quarter is background. A wide
+       shape keeps what is inside it, such as the play sign in its field. */
+    var lim = Math.round(S * 0.07),
+      cand = [];
+    for (p = 0; p < n; p++) cand.push(0);
     for (var hy = 0; hy < S; hy++)
       for (var dir = 1; dir >= -1; dir -= 2) {
-        var last = null,
-          run = 0;
+        var last = null;
         for (var hx = dir > 0 ? 0 : S - 1; hx >= 0 && hx < S; hx += dir) {
           p = hy * S + hx;
           i = p * 4;
-          if (bg[p] === 2) {
-            last = px3(d, p);
-            run = 0;
-          } else if (bg[p] === 1) last = null;
-          else if (last && run <= lim && d[i + 3] >= 200 && cdist(d, i, last) < 30) {
-            bg[p] = 2;
-            last = px3(d, p);
-            run = 0;
-          } else run++;
+          if (bg[p] === 2) last = px3(d, p);
+          else if (bg[p] === 1) last = null;
+          else if (last && d[i + 3] >= 200 && cdist(d, i, last) < 28) cand[p] = 1;
         }
       }
+    for (p = 0; p < n; p++) {
+      if (cand[p] !== 1) continue;
+      var comp = [p],
+        ci = 0,
+        cx0 = S,
+        cy0 = S,
+        cx1 = -1,
+        cy1 = -1;
+      cand[p] = 2;
+      while (ci < comp.length) {
+        var q = comp[ci++],
+          hqx = q % S,
+          hqy = (q - hqx) / S;
+        if (hqx < cx0) cx0 = hqx;
+        if (hqx > cx1) cx1 = hqx;
+        if (hqy < cy0) cy0 = hqy;
+        if (hqy > cy1) cy1 = hqy;
+        var nq = [hqx > 0 ? q - 1 : -1, hqx < S - 1 ? q + 1 : -1, q - S, q + S];
+        for (k = 0; k < 4; k++)
+          if (nq[k] >= 0 && nq[k] < n && cand[nq[k]] === 1) {
+            cand[nq[k]] = 2;
+            comp.push(nq[k]);
+          }
+      }
+      if (comp.length < 12 || cx1 - cx0 < 2 || cy1 - cy0 < 2) continue;
+      var tot = 0,
+        bgs = 0;
+      for (var yy2 = Math.max(0, cy0 - lim); yy2 <= Math.min(S - 1, cy1 + lim); yy2 += 2)
+        for (var xx2 = Math.max(0, cx0 - lim); xx2 <= Math.min(S - 1, cx1 + lim); xx2 += 2) {
+          tot++;
+          if (bg[yy2 * S + xx2]) bgs++;
+        }
+      if (bgs < tot * 0.25) continue;
+      for (k = 0; k < comp.length; k++) bg[comp[k]] = 2;
+    }
     var gone = 0;
     for (p = 0; p < n; p++) if (bg[p]) gone++;
     if (gone < n * 0.08) return ''; // hardly any background: the art fills the icon
