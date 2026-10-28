@@ -24,8 +24,15 @@ function cutout(img, kind) {
   var S = 384,
     cv = document.createElement('canvas');
   cv.width = cv.height = S;
-  var x = cv.getContext('2d');
-  x.drawImage(img, 0, 0, S, S);
+  var x = cv.getContext('2d'),
+    /* drawn whole and centred, keeping its proportions (a wide logo of your own, an SVG with only a viewBox) */
+    nw = img.naturalWidth || S,
+    nh = img.naturalHeight || S,
+    dw = nw >= nh ? S : (S * nw) / nh,
+    dh = nw >= nh ? (S * nh) / nw : S,
+    ox = (S - dw) / 2,
+    oy = (S - dh) / 2;
+  x.drawImage(img, ox, oy, dw, dh);
   var im = x.getImageData(0, 0, S, S),
     d = im.data,
     n = S * S,
@@ -227,11 +234,13 @@ function cutout(img, kind) {
     y0 = S,
     x1 = -1,
     y1 = -1,
-    vis = 0;
+    vis = 0,
+    lsum = 0;
   for (p = 0; p < n; p++) {
     i = p * 4;
     if (d[i + 3] < 24) continue;
     vis++;
+    lsum += 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
     var cx = p % S,
       cy = (p - cx) / S;
     if (cx < x0) x0 = cx;
@@ -278,14 +287,25 @@ function cutout(img, kind) {
       d[i + 3] = Math.round(d[i + 3] * keep);
     }
   };
-  var info = { box: [x0 / S, y0 / S, (x1 + 1) / S, (y1 + 1) / S], asp: bw / bh, top: top, bot: bot },
+  var info = {
+      box: [(x0 - ox) / dw, (y0 - oy) / dh, (x1 + 1 - ox) / dw, (y1 + 1 - oy) / dh], // fractions of the picture itself
+      iasp: nw / nh,
+      lm: lsum / vis, // the logo's mean brightness, 0-255
+      asp: bw / bh,
+      top: top,
+      bot: bot,
+    },
     raw = x.createImageData(S, S);
   raw.data.set(d);
   /* dark: the logo's own colours; on a logo drawn for a light background its near-black parts (text) turn light, or they would
-     vanish (on a dark background they are holes in the logo and stay) */
+     vanish (on a dark background they are holes in the logo and stay); on a logo on transparency (your own icon) its darkest
+     parts turn light: black, navy, charcoal, not a brand's red */
   for (p = 0; p < n; p++) {
     i = p * 4;
-    if (onLight && d[i + 3] && Math.max(d[i], d[i + 1], d[i + 2]) < 70) {
+    if (
+      d[i + 3] &&
+      (kind === 'logo' ? 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2] < 45 : onLight && Math.max(d[i], d[i + 1], d[i + 2]) < 70)
+    ) {
       d[i] = 236;
       d[i + 1] = 238;
       d[i + 2] = 242;
@@ -339,7 +359,9 @@ function darkApply(d) {
     } else {
       if (i.src !== d._url) i.src = d._url;
       if (d._col) paint(d, d._col);
-      d.style.background = info.top ? 'linear-gradient(rgb(' + info.top.join(',') + '),rgb(' + info.bot.join(',') + '))' : '';
+      /* the picture's own background; a logo on transparency (your own icon) gets a light tile when it is dark, else the dark one */
+      var tb = info.top ? [info.top, info.bot] : info.lm < 110 ? [[240, 241, 244]] : [DARK_BG];
+      d.style.background = 'linear-gradient(rgb(' + tb[0].join(',') + '),rgb(' + (tb[1] || tb[0]).join(',') + '))';
     }
   }
   var h = logoH(d, info.asp);
@@ -353,7 +375,7 @@ function darkApply(d) {
     tw = d.offsetWidth || 200,
     bx = info.box,
     ih = ((h / 100) * th) / (bx[3] - bx[1]),
-    iw = ih * (i.naturalWidth && i.naturalHeight ? i.naturalWidth / i.naturalHeight : 1),
+    iw = ih * info.iasp,
     s = i.style;
   s.position = 'absolute';
   s.maxWidth = 'none';
