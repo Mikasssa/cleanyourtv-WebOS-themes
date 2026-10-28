@@ -42,6 +42,23 @@ function setCats() {
         rows: [
           { label: t('Dock'), value: dockIds().length + ' / ' + TH.dockN, open: dockMenu },
           { label: t('Top buttons'), value: String(shownBar().length), open: topButtonsMenu },
+          {
+            label: t('Top button labels'),
+            value: barLabelsMode() === 'hide' ? t('Icons only') : barLabelsMode() === 'show' ? t('Icons and text') : t('Theme'),
+            open: choiceMenu(
+              t('Top button labels'),
+              [
+                ['', t('Theme')],
+                ['show', t('Icons and text')],
+                ['hide', t('Icons only')],
+              ],
+              barLabelsMode,
+              function (v) {
+                if (v) cfg.barLabels = v;
+                else delete cfg.barLabels;
+              }
+            ),
+          },
           { label: t('Hidden apps'), value: nh ? String(nh) : t('None'), open: hiddenMenu },
           {
             label: t('App order'),

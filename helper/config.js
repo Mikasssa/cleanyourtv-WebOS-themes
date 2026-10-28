@@ -22,6 +22,7 @@ const LAUNCHER_KEYS = [
   'noDrift',
   'wallTint',
   'iconStyle',
+  'barLabels',
   'monoIcons',
   'wall',
   'cards',

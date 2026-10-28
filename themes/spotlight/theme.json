@@ -42,17 +42,17 @@
  "shelf": {
   "show": true,
   "x": 136,
-  "y": 530,
+  "y": 610,
   "scale": 1.05
  },
  "dock": {
   "anchor": "bottom",
   "align": "center",
   "count": 7,
-  "w": 262,
-  "h": 200,
-  "gap": -14,
-  "radius": 32,
+  "w": 202,
+  "h": 128,
+  "gap": -11,
+  "radius": 26,
   "panel": 0.08,
   "panelPad": 26,
   "tileAlpha": 1,

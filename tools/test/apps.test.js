@@ -83,6 +83,10 @@ run(async () => {
   const mono = config.get().iconStyle === 'mono';
   await call(apps, '/api/config', 'POST', { dock: ['a.one'], iconStyle: 'neon' });
   ok(mono && config.get().iconStyle === undefined, 'the icon style is saved when it is dark or mono, else left out');
+  await call(apps, '/api/config', 'POST', { dock: ['a.one'], barLabels: 'hide' });
+  const iconsOnly = config.get().barLabels === 'hide';
+  await call(apps, '/api/config', 'POST', { dock: ['a.one'], barLabels: 'big' });
+  ok(iconsOnly && config.get().barLabels === undefined, 'the top button labels are saved when they are show or hide, else left out');
   await call(apps, '/api/config', 'POST', { dock: ['a.one'], wallTint: true });
   const wt = config.get().wallTint === true;
   await call(apps, '/api/config', 'POST', { dock: ['a.one'], wallTint: 'yes' });

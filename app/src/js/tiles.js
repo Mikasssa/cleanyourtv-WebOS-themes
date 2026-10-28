@@ -59,8 +59,13 @@ function tile(a) {
 }
 
 /* ---------- ambient glow: two layers cross-fade, updated only once focus settles ---------- */
+/* apps whose glow is set here instead of taken from the icon: YouTube's red would look like Netflix's, so its light is white */
+function appGlow(e) {
+  var id = e._a && e._a.id;
+  return id && /^youtube\.leanback\.v\d+$/.test(id) ? '255,255,255' : '';
+}
 function glowNow(e) {
-  var col = TH.glow || e.style.getPropertyValue('--c') || '74,84,112';
+  var col = TH.glow || appGlow(e) || e.style.getPropertyValue('--c') || '74,84,112';
   if (col === gColor) return;
   gColor = col;
   var on = gSide ? $('gB') : $('gA'),

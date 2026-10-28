@@ -1,5 +1,18 @@
 /* ---------- theme: the service resolves the chosen theme (manager > Theme) into CSS variables and a few numbers ---------- */
-var TH0 = { cols: 10, tileH: 151, gapY: 26, gt: 350, viewH: 780, dockN: 4, overlay: false, push: null, overlayH: 510, glow: '', slots: [] },
+var TH0 = {
+    cols: 10,
+    tileH: 151,
+    gapY: 26,
+    gt: 350,
+    viewH: 780,
+    dockN: 4,
+    overlay: false,
+    push: null,
+    overlayH: 510,
+    glow: '',
+    slots: [],
+    labels: '',
+  },
   TH = TH0,
   themeKeys = [],
   themeAttrs = [
@@ -23,6 +36,7 @@ function applyTheme(t) {
   b.classList.remove('grid-open');
   if (!t || !t.vars) {
     TH = TH0;
+    applyLabels();
     return;
   }
   for (k in t.vars) {
@@ -75,7 +89,18 @@ function applyTheme(t) {
     overlayH: t.overlayH || 510,
     glow: t.glowRgb || '',
     slots: t.slots || [],
+    labels: (t.attrs && t.attrs.labels) || '',
   };
+  applyLabels();
+}
+/* Customise > Top button labels: icons only or icons with text, or (unset) what the theme chose */
+function barLabelsMode() {
+  return cfg.barLabels === 'show' || cfg.barLabels === 'hide' ? cfg.barLabels : '';
+}
+function applyLabels() {
+  var v = barLabelsMode() || TH.labels || '';
+  if (v) document.body.setAttribute('data-labels', v);
+  else document.body.removeAttribute('data-labels');
 }
 
 function setFocus(nr, nc, first) {

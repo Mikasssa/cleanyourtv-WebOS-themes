@@ -257,6 +257,19 @@ body {
 [data-labels="hide"] .pill span {
   display: none;
 }
+/* icons only: the button is as wide as it is high, its icon in the middle */
+[data-labels="hide"] .pill {
+  width: var(--pill-h);
+  padding: 0;
+  justify-content: center;
+}
+/* round buttons with their names (Customise > Top buttons > Labels): a pill again, as wide as its text */
+[data-bar="round"][data-labels="show"] .pill {
+  width: auto;
+  padding: 0 30px 0 24px;
+  justify-content: flex-start;
+  border-radius: calc(var(--pill-h) / 2);
+}
 
 #shelf {
   position: absolute;

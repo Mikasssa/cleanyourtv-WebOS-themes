@@ -168,6 +168,7 @@ function create(ctx) {
     if (['auto', '24', '12'].includes(b.clock)) out.clock = b.clock;
     if (b.runDots === true) out.runDots = true; // the green dot on open apps (off unless switched on)
     if (b.iconStyle === 'dark' || b.iconStyle === 'mono') out.iconStyle = b.iconStyle; // Customise > App icons
+    if (b.barLabels === 'show' || b.barLabels === 'hide') out.barLabels = b.barLabels; // Customise > Top button labels
     if (strs(b.monoIcons) && strs(b.monoIcons).length) out.monoIcons = strs(b.monoIcons); // apps whose logo is in one colour in Dark
     if (b.wallTint === true) out.wallTint = true; // Customise > Accent colour > From the wallpaper
     if (b.noDrift === true) out.noDrift = true; // a theme's moving wallpaper held still (on unless switched off)

@@ -673,5 +673,8 @@
  "Your firmware is not in the compatibility list and LG’s Home looks different. This tries it anyway; a failed start restarts the TV with LG’s Home.": "Вашей прошивки нет в списке совместимости, и главный экран LG выглядит иначе. Это попробует всё равно; неудачный запуск перезапустит телевизор с главным экраном LG.",
  "Your M3U playlist and its XMLTV guide. Choose it to set up: a QR code opens a page on your phone where you enter the playlist address and the 6-digit code shown here.": "Ваш плейлист M3U и его программа XMLTV. Выберите для настройки: QR-код откроет страницу на телефоне, где нужно ввести адрес плейлиста и показанный здесь 6-значный код.",
  "Your own photos behind Home: uploaded from a phone, or synced from Immich albums. Switch them on in the launcher: Customise > Wallpapers.": "Ваши фото за главным экраном: загруженные с телефона или синхронизированные из альбомов Immich. Включите их в лаунчере: Настроить > Wallpapers.",
- "Your playlist": "Ваш плейлист"
+ "Your playlist": "Ваш плейлист",
+ "Top button labels": "Подписи верхних кнопок",
+ "Icons and text": "Значки и текст",
+ "Icons only": "Только значки"
 }

@@ -10,7 +10,8 @@ same on every supported webOS version.
 - **Dock.** Up to four apps, large, on the first row.
 - **Top shelf.** The name of the focused app and an ambient glow taken from its icon.
 - **Grid.** All other apps, sorted by how often you use each one (or A to Z).
-- **Top buttons.** Inputs, Live TV, Settings and Customise, and a clock. The buttons you see are yours to change.
+- **Top buttons.** Inputs, Live TV, Settings and Customise, and a clock. The buttons you see are yours to change. **Customise** > **Top button labels**
+  shows them as icons only or as icons with their names; left on **Theme**, the theme decides.
 - **Open apps.** Optionally a green dot on the tile of every app that is open, as on the active input in the Inputs list: off by
   default, **Customise** > **Mark running apps** switches it on, in the launcher and in the Inputs picker. Back on the home screen lists
   the open apps to close them (see [Running apps](#running-apps)).
