@@ -628,6 +628,53 @@ body[data-icclip*="grid"] #grid .tile.f {
 body.wpon {
   background-image: none;
 }
+/* effects.wallpaperMotion "drift": the theme's wallpaper moves to a layer of its own that slowly pans and zooms (transform only, on
+   the GPU), and so do the photo layers. The scale keeps the moving picture past the screen edges. cfg.noDrift (Customise >
+   Wallpaper motion) stops it. */
+#wall {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1920px;
+  height: 1080px;
+  display: none;
+  pointer-events: none;
+  background-image: var(--wall);
+  background-size: 1920px 1080px;
+}
+body[data-motion="drift"] {
+  background-image: none;
+}
+body[data-motion="drift"] #wall {
+  display: block;
+}
+body.wpon #wall {
+  display: none;
+}
+body[data-motion="drift"]:not(.still) #wall,
+body[data-motion="drift"]:not(.still) .wp {
+  will-change: transform;
+  -webkit-animation: drift 60s ease-in-out infinite alternate;
+  animation: drift 60s ease-in-out infinite alternate;
+}
+@-webkit-keyframes drift {
+  0% {
+    -webkit-transform: scale(1.08) translate3d(-2%, -1.5%, 0);
+    transform: scale(1.08) translate3d(-2%, -1.5%, 0);
+  }
+  100% {
+    -webkit-transform: scale(1.12) translate3d(2%, 1.5%, 0);
+    transform: scale(1.12) translate3d(2%, 1.5%, 0);
+  }
+}
+@keyframes drift {
+  0% {
+    transform: scale(1.08) translate3d(-2%, -1.5%, 0);
+  }
+  100% {
+    transform: scale(1.12) translate3d(2%, 1.5%, 0);
+  }
+}
 /* cards: small widgets in the theme's slots (app/src/js/cards.js); placed like the clock, from the slot's edges */
 #cards {
   position: absolute;

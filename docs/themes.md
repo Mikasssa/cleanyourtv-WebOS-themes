@@ -228,6 +228,7 @@ when the focus moves down into it (Back or Up closes it); a dock at the top leav
 | `effects.glowColor` | `app`, `accent` | `app` | `app`: taken from the focused icon; `accent`: the accent colour. |
 | `effects.speed` | 0 to 2 | `1` | Animation speed multiplier; 0 switches the animations off. |
 | `effects.wallpaper` | a file name | none | A file name in `themes/wallpapers/`: `.jpg`, `.png` or `.webp`, at most 1.5 MB; drawn at 1920 x 1080. |
+| `effects.wallpaperMotion` | `none`, `drift` | `none` | `drift`: the wallpaper (and the photos of Wallpapers) slowly pans and zooms, once a minute there and back; only transform animates, so it costs the TV next to nothing. People can switch it off in Customise. Off when `effects.speed` is 0. |
 | `effects.wallpaperDim` | 0 to 0.9 | `0.4` | How far the wallpaper is darkened with the background colour. |
 <!-- schema:end -->
 

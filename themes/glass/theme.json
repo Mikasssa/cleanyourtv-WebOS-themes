@@ -33,7 +33,7 @@
   "panel": 0.22,
   "panelPad": 28,
   "tileAlpha": 1,
-  "tileFrost": 0.4,
+  "tileFrost": 0.2,
   "tileFrostColor": "#ffffff",
   "iconScale": 2,
   "lift": 14,
@@ -61,7 +61,8 @@
   "glow": 0.5,
   "glowColor": "accent",
   "wallpaper": "glass.jpg",
-  "wallpaperDim": 0.35
+  "wallpaperDim": 0.35,
+  "wallpaperMotion": "drift"
  },
  "clock": {
   "layout": "stack",

@@ -181,6 +181,13 @@ const SCHEMA = [
     '',
     'A file name in `themes/wallpapers/`: `.jpg`, `.png` or `.webp`, at most 1.5 MB; drawn at 1920 x 1080.',
   ],
+  [
+    'effects.wallpaperMotion',
+    'enum',
+    ['none', 'drift'],
+    'none',
+    '`drift`: the wallpaper (and the photos of Wallpapers) slowly pans and zooms, once a minute there and back; only transform animates, so it costs the TV next to nothing. People can switch it off in Customise. Off when `effects.speed` is 0.',
+  ],
   ['effects.wallpaperDim', 'num', [0, 0.9], 0.4, 'How far the wallpaper is darkened with the background colour.'],
 ];
 const DEFAULTS = {};
@@ -474,6 +481,8 @@ function resolve(t, accent) {
         keep: sl.keep,
       };
     });
+  // only a theme with a moving wallpaper has this key (the same reason)
+  if (v['effects.wallpaperMotion'] === 'drift' && v['effects.speed'] > 0) out.attrs.motion = 'drift';
   // only a theme with bigger or smaller icons has these keys (the same reason)
   if (v['dock.iconScale'] !== 1) out.vars['--dock-ic'] = String(v['dock.iconScale']);
   if (v['grid.iconScale'] !== 1) out.vars['--grid-ic'] = String(v['grid.iconScale']);

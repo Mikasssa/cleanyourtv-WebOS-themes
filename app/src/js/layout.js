@@ -1,5 +1,7 @@
 /* ---------- layout ---------- */
 function rebuild() {
+  /* Customise > Wallpaper motion: a theme's moving wallpaper held still */
+  document.body.classList.toggle('still', cfg.noDrift === true);
   var by = {};
   apps.forEach(function (a) {
     by[a.id] = a;

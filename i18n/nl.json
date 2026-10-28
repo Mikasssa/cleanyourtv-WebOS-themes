@@ -663,5 +663,8 @@
  "Your firmware is not in the compatibility list and LG’s Home looks different. This tries it anyway; a failed start restarts the TV with LG’s Home.": "Je firmware staat niet in de compatibiliteitslijst en LG’s Home ziet er anders uit. Dit probeert het toch; een mislukte start herstart de TV met LG’s Home.",
  "Your M3U playlist and its XMLTV guide. Choose it to set up: a QR code opens a page on your phone where you enter the playlist address and the 6-digit code shown here.": "Je M3U-afspeellijst en de XMLTV-gids. Kies hem om in te stellen: een QR-code opent een pagina op je telefoon waar je het adres van de afspeellijst en de 6-cijferige code van hier invult.",
  "Your own photos behind Home: uploaded from a phone, or synced from Immich albums. Switch them on in the launcher: Customise > Wallpapers.": "Je eigen foto’s achter Home: geüpload met een telefoon of gesynchroniseerd uit Immich-albums. Zet ze aan in de launcher: Aanpassen > Wallpapers.",
- "Your playlist": "Je afspeellijst"
+ "Your playlist": "Je afspeellijst",
+ "Wallpaper motion": "Bewegende achtergrond",
+ "Still": "Stil",
+ "Slow drift": "Langzaam glijden"
 }

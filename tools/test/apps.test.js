@@ -73,6 +73,10 @@ run(async () => {
   const on = config.get().runDots === true;
   await call(apps, '/api/config', 'POST', { dock: ['a.one'], runDots: 'yes' });
   ok(on && config.get().runDots === undefined, 'the green dot on open apps is off by default and saved only when switched on');
+  await call(apps, '/api/config', 'POST', { dock: ['a.one'], noDrift: true });
+  const still = config.get().noDrift === true;
+  await call(apps, '/api/config', 'POST', { dock: ['a.one'], noDrift: 'yes' });
+  ok(still && config.get().noDrift === undefined, 'a still wallpaper is saved only when switched on');
   await call(apps, '/api/config', 'POST', {
     dock: ['a.one'],
     cards: { greeting: { type: 'greeting', name: 'Sam' }, 'x y': { type: 'a' } },

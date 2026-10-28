@@ -116,6 +116,13 @@ run(async () => {
     small.vars['--dock-ic'] === '0.8' && !('--grid-ic' in small.vars) && !('icclip' in small.attrs) && !('--dock-ic' in plain.vars),
     'a smaller icon is not cropped, and a theme that keeps the default size gets no icon keys'
   );
+  // effects.wallpaperMotion: the drift is an attribute for the page, off when the animations are
+  const drift = themeMod.resolve(themeMod.normalize({ effects: { wallpaperMotion: 'drift' } }, 'drift'));
+  const driftOff = themeMod.resolve(themeMod.normalize({ effects: { wallpaperMotion: 'drift', speed: 0 } }, 'driftoff'));
+  ok(
+    drift.attrs.motion === 'drift' && !('motion' in driftOff.attrs) && !('motion' in plain.attrs),
+    'a drifting wallpaper is marked for the page, and not when the animations are off or by default'
+  );
   // dock.tileFrost and dock.tileFrostColor: a tint over the resting tiles, its colour resolved to an rgb triple
   const frost = themeMod.resolve(themeMod.normalize({ dock: { tileFrost: 0.4, tileFrostColor: '#ffffff' } }, 'frost'));
   ok(

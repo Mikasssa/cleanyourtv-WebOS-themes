@@ -528,6 +528,19 @@ function customizeMenu() {
         stay: true,
         fn: wallMenu,
       },
+      /* only where the theme's wallpaper moves */
+      document.body.getAttribute('data-motion')
+        ? {
+            label: t('Wallpaper motion'),
+            sub: cfg.noDrift === true ? t('Still') : t('Slow drift'),
+            stay: true,
+            fn: function () {
+              if (cfg.noDrift === true) delete cfg.noDrift;
+              else cfg.noDrift = true;
+              saveCfg();
+            },
+          }
+        : null,
       { label: t('Accent colour'), stay: true, fn: accentMenu },
       { sep: true },
       {
