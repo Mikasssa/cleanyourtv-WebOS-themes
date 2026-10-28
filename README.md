@@ -1,3 +1,3 @@
 # tv-build
 
-Gotowa paczka CleanYourTV z gałęzi theme-glass (commit eb06b21) do instalacji na TV przez SSH.
+Gotowa paczka CleanYourTV z gałęzi theme-glass (commit 339813b) do instalacji na TV przez SSH.
