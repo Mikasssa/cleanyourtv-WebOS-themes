@@ -412,6 +412,22 @@ function appMenu(a) {
           );
         },
       });
+    /* App icons > Dark: this one logo in one light colour, when its own colours do not sit well on the dark tile */
+    if (iconStyle() === 'dark' && !a.input && !a.sys)
+      items.push({
+        label: t('Logo colours'),
+        sub: monoIcon(a.id) ? t('One colour') : t('Its own'),
+        stay: true,
+        fn: function () {
+          var m = (cfg.monoIcons || []).filter(function (i) {
+            return i !== a.id;
+          });
+          if (!monoIcon(a.id)) m.push(a.id);
+          if (m.length) cfg.monoIcons = m;
+          else delete cfg.monoIcons;
+          saveCfg();
+        },
+      });
     if (a.input)
       items.push({
         label: t('Remove from Home'),

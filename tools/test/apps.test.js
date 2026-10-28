@@ -83,6 +83,13 @@ run(async () => {
   const mono = config.get().iconStyle === 'mono';
   await call(apps, '/api/config', 'POST', { dock: ['a.one'], iconStyle: 'neon' });
   ok(mono && config.get().iconStyle === undefined, 'the icon style is saved when it is dark or mono, else left out');
+  await call(apps, '/api/config', 'POST', { dock: ['a.one'], monoIcons: ['a.one', 7] });
+  const mi = config.get().monoIcons;
+  await call(apps, '/api/config', 'POST', { dock: ['a.one'], monoIcons: [] });
+  ok(
+    mi.length === 1 && mi[0] === 'a.one' && config.get().monoIcons === undefined,
+    'the apps with a one-colour logo are saved, an empty list is left out'
+  );
   // your own icon: a file named after the app in the icons folder is served instead of the app's, also for an app not on the list
   const dir = path.join(process.env.CYTV_DIR, 'icons');
   fs.mkdirSync(dir);

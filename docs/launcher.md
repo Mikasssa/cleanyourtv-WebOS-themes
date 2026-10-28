@@ -59,7 +59,8 @@ system apps are never in it. The list is read when it opens and closes when you 
   own background (the tile takes that background); *Dark*: the logo alone, in its colours, on one dark tile colour, so the icons look
   like one set; *Dark, one colour*: the same with every logo in one light colour. The background is taken out on the TV from each
   app's own icon; an icon that is a picture without a plain background stays as it is. For the cleanest result, use
-  [your own icons](#your-own-icons);
+  [your own icons](#your-own-icons). In *Dark*, holding OK on an app gives **Logo colours**: *Its own* or *One colour*, for a logo
+  whose colours do not sit well on the dark tile;
 - the **clock** format (automatic, 12 or 24 hour);
 - the **theme** (see [Themes](themes.md)) and the **accent colour**; the theme list shows each theme's screenshot;
 - **Wallpapers**: your own photos behind Home, and how often they change (see [Wallpapers](wallpapers.md));
@@ -155,6 +156,7 @@ Settings are stored on the TV in `/media/developer/cleanyourtv/config.json`:
 | `clock` | `auto`, `12` or `24`. |
 | `runDots` | `true` shows a green dot on open apps (off by default). |
 | `iconStyle` | `dark`: every app icon without its own background, on one dark tile colour; `mono`: the same with every logo in one light colour (Customise > App icons). Absent: the icons as they are. |
+| `monoIcons` | App ids whose logo is in one light colour also in the *Dark* icon style (hold OK on the app > **Logo colours**). |
 | `noDrift` | `true` holds a theme's moving wallpaper still (Customise > Wallpaper motion). |
 
 See [`config.example.json`](https://github.com/lasharor/cleanyourtv-WebOS/blob/main/config.example.json). Change settings in

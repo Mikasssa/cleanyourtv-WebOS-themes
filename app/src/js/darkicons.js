@@ -8,6 +8,10 @@ var DARK_BG = [24, 26, 32],
   iconInfo = {}, // app id: {box, asp, top, bot, dark, mono} (see cutout), or '' when the icon is left as it is
   darkQ = [],
   darkBusy = false;
+/* hold OK on an app > Logo colours: its logo in one colour also in the Dark style */
+function monoIcon(id) {
+  return (cfg.monoIcons || []).indexOf(id) >= 0;
+}
 function iconStyle() {
   return cfg.iconStyle === 'dark' || cfg.iconStyle === 'mono' ? cfg.iconStyle : '';
 }
@@ -345,8 +349,9 @@ function darkApply(d) {
     return;
   }
   if (!info) return darkReset(d);
-  var st = iconStyle(),
-    key = st || 'orig';
+  var st = iconStyle();
+  if (st === 'dark' && monoIcon(a.id)) st = 'mono';
+  var key = st || 'orig';
   if (d._dk !== key) {
     d._dk = key;
     d.classList.remove('fill');
