@@ -182,7 +182,8 @@ var PLAYER = (function () {
     }, 30);
   }
   function apply(x) {
-    if (!x || typeof x !== 'object') return;
+    /* only a state of the service changes the player; an error reply (a command Spotify refused) leaves it as it is */
+    if (!x || typeof x !== 'object' || typeof x.linked !== 'boolean') return;
     var was = JSON.stringify([st.linked, !!st.now, st.now && st.now.title, st.now && st.now.playing]);
     st = x;
     at = Date.now();
@@ -244,9 +245,15 @@ var PLAYER = (function () {
               : t('Play on this TV');
     },
     cmd: function (c) {
-      api('/api/spotify/cmd', { do: c }).then(apply, function () {
-        toast(t('Spotify did not answer. Try again in a moment.'), true);
-      });
+      api('/api/spotify/cmd', { do: c }).then(
+        function (x) {
+          apply(x);
+          if (x && x.error) toast(t('Spotify: %s').replace('%s', x.error), true);
+        },
+        function () {
+          toast(t('Spotify did not answer. Try again in a moment.'), true);
+        }
+      );
     },
     link: function () {
       return api('/api/spotify/pair', {}).then(function (x) {

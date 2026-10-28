@@ -22,7 +22,8 @@ const PAIR_PORT = 8793, // after the cards page (8792)
   SCOPE = 'user-read-playback-state user-modify-playback-state user-read-currently-playing',
   ACCOUNTS = process.env.CYTV_SPOTIFY_ACCOUNTS || 'https://accounts.spotify.com', // the tests point both at a local server
   API = process.env.CYTV_SPOTIFY_API || 'https://api.spotify.com/v1',
-  NOW_MS = 2500, // a reading of what plays is reused this long (the launcher asks every few seconds)
+  NOW_MS = 2500,
+  IDLE_MS = 10 * 60 * 1000, // a reading of what plays is reused this long (the launcher asks every few seconds)
   CLIENT_ID = /^[0-9a-f]{32}$/i,
   ART_HOST = /^https:\/\/i\.scdn\.co\/image\/[0-9a-f]{20,64}$/i;
 
@@ -57,7 +58,7 @@ function nowFrom(j) {
     art: ART_HOST.test(art) ? art : '',
     ms: +j.progress_ms || 0,
     dur: +it.duration_ms || 0,
-    device: j.device ? { name: String(j.device.name || ''), type: String(j.device.type || '') } : null,
+    device: j.device ? { id: String(j.device.id || ''), name: String(j.device.name || ''), type: String(j.device.type || '') } : null,
   };
 }
 
@@ -74,6 +75,8 @@ function create(ctx) {
     nowAt = 0,
     nowP = null,
     lastError = '',
+    shownNow = null, // the last thing that played, shown paused for a while after Spotify goes quiet (no device active)
+    shownAt = 0,
     pair = null;
   const arts = new Map(); // cover address -> picture, the last few
 
@@ -130,6 +133,10 @@ function create(ctx) {
         r => {
           now = r.status === 204 ? null : nowFrom(r.j);
           lastError = '';
+          if (now) {
+            shownNow = now;
+            shownAt = Date.now();
+          }
         },
         e => {
           lastError = String(e.message || e);
@@ -144,8 +151,16 @@ function create(ctx) {
     return nowP;
   }
   async function cmd(what) {
-    if (what === 'play') await call('PUT', '/me/player/play');
-    else if (what === 'pause') await call('PUT', '/me/player/pause');
+    if (what === 'play') {
+      try {
+        await call('PUT', '/me/player/play');
+      } catch (e) {
+        // the device that played went quiet (Spotify on the TV was closed, a phone locked): play on it again, or on the TV
+        const dev = shownNow && shownNow.device && shownNow.device.id;
+        if (!dev) throw e;
+        await call('PUT', '/me/player', { device_ids: [dev], play: true });
+      }
+    } else if (what === 'pause') await call('PUT', '/me/player/pause');
     else if (what === 'next') await call('POST', '/me/player/next');
     else if (what === 'prev') await call('POST', '/me/player/previous');
     else if (what === 'tv') {
@@ -297,6 +312,13 @@ function create(ctx) {
     pair = null;
   }
 
+  // nothing active any more, shortly after something played (the device went to sleep, Spotify on the TV was closed): the last song
+  // stays on Home, paused, for IDLE_MS, so the play button can start it again on that device
+  function held(n) {
+    if (n) return n;
+    if (!shownNow || Date.now() - shownAt > IDLE_MS) return null;
+    return Object.assign({}, shownNow, { playing: false, idle: true });
+  }
   async function state() {
     const c = cfg(),
       linked = !!(c.clientId && c.refresh);
@@ -304,7 +326,7 @@ function create(ctx) {
       configured: !!c.clientId,
       linked,
       pairing: pair ? { url: pair.url, svg: pair.svg } : null,
-      now: linked ? await readNow(false) : null,
+      now: linked ? held(await readNow(false)) : null,
       error: linked ? lastError : '',
     };
   }
@@ -315,11 +337,11 @@ function create(ctx) {
     if (u === '/api/spotify/unlink' && req.method === 'POST') {
       save({ refresh: undefined });
       access = '';
-      now = null;
+      now = shownNow = null;
       return web.json(res, await state());
     }
     if (u === '/api/spotify/cmd' && req.method === 'POST') {
-      const b = await body();
+      const b = await body(req); // web.body(req): the server hands the reader, not the parsed body
       try {
         await cmd(String(b.do || ''));
       } catch (e) {

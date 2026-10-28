@@ -8,7 +8,7 @@ const nc = req('netcompat');
 run(async () => {
   // a stand-in for accounts.spotify.com and api.spotify.com
   const seen = [];
-  let player = { is_playing: true, progress_ms: 84000, device: { name: 'Living room TV', type: 'TV' }, item: null };
+  let player = { is_playing: true, progress_ms: 84000, device: { id: 'd0', name: 'Living room TV', type: 'TV' }, item: null };
   player.item = {
     name: 'Neon Harbour',
     duration_ms: 221000,
@@ -36,7 +36,9 @@ run(async () => {
         return send(400, { error: 'invalid_grant' });
       }
       if (!/^Bearer A/.test(q.headers.authorization || '')) return send(401, { error: { message: 'no token' } });
-      if (q.url === '/v1/me/player' && q.method === 'GET') return send(200, player);
+      if (q.url === '/v1/me/player' && q.method === 'GET') return player ? send(200, player) : send(204);
+      if (q.url === '/v1/me/player/play' && q.method === 'PUT')
+        return player ? send(204) : send(404, { error: { message: 'Player command failed: No active device found' } });
       if (q.url === '/v1/me/player/next' && q.method === 'POST') return send(204);
       if (q.url === '/v1/me/player/pause' && q.method === 'PUT') {
         player.is_playing = false;
@@ -87,7 +89,12 @@ run(async () => {
       setHeader() {},
       end: x => (out = x === undefined ? '' : String(x)),
     };
-    await s.handle({ method: method || 'GET', url: u, headers: {} }, res, u.split('?')[0], async () => body || {});
+    const rq = { method: method || 'GET', url: u, headers: {} };
+    // like the server: the handler gets a reader that must be given the request
+    await s.handle(rq, res, u.split('?')[0], async x => {
+      if (x !== rq) throw new Error('body() was not given the request');
+      return body || {};
+    });
     let j = null;
     try {
       j = JSON.parse(out);
@@ -121,6 +128,21 @@ run(async () => {
     seen.some(x => /^PUT \/v1\/me\/player \{"device_ids":\["t1"\],"play":true\}/.test(x)),
     'play here moves the music to the TV device'
   );
+  // the device went quiet: the last song stays, paused, and play starts it on that device again
+  const keep = player;
+  player = null;
+  await new Promise(res => setTimeout(res, 2600));
+  r = await callIt(s1, '/api/spotify');
+  ok(
+    r.j.now && r.j.now.idle === true && r.j.now.playing === false && r.j.now.title === 'Neon Harbour',
+    'when nothing is active the last song stays, paused'
+  );
+  r = await callIt(s1, '/api/spotify/cmd', 'POST', { do: 'play' });
+  ok(
+    seen.some(x => /^PUT \/v1\/me\/player \{"device_ids":\["d0"\],"play":true\}/.test(x)),
+    'play with no active device starts the last device again'
+  );
+  player = keep;
   r = await callIt(s1, '/api/spotify/cmd', 'POST', { do: 'dance' });
   ok(r.code === 502 && /unknown/.test(r.j.error), 'an unknown command is refused');
   r = await callIt(s1, '/api/spotify/unlink', 'POST');

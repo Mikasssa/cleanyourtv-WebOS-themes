@@ -1081,6 +1081,10 @@ body.grid-open #player {
 #player.pl-card .pprog {
   margin-top: 4px;
 }
+#player.pl-card .pctl {
+  justify-content: center;
+  margin-top: 6px;
+}
 /* B: a bar right above the dock, in the cover's colours (player.js sets left, top and width from the dock) */
 #player.pl-bar {
   height: 130px;
