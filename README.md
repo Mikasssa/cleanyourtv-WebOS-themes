@@ -1,6 +1,6 @@
 # tv-build
 
-Gotowa paczka CleanYourTV z gałęzi theme-glass (commit 659015a) do instalacji na TV przez SSH.
+Gotowa paczka CleanYourTV z gałęzi theme-glass (commit df695f7) do instalacji na TV przez SSH.
 
 `own-icons.sh`: kopiuje Twoje logo z /tmp/logos na TV do folderu icons, dopasowując je do aplikacji po nazwie.
 
